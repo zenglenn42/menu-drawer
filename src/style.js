@@ -69,9 +69,9 @@ export const accordion = {
   maxHeight: '50vh',
   overflow: 'auto scroll',
   backgroundColor: 'white',
-  padding: '1em',
   color: 'black',
-  flexGrow: 0
+  flexGrow: 0,
+  width: '100%',
 }
 
 export const footer = {

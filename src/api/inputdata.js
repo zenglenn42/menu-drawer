@@ -7,6 +7,81 @@ import { ReactComponent as UnicornIcon } from './svg/Unicorn.svg'
 import { ReactComponent as MoreIcon } from './svg/MoreDots.svg'
 import { ReactComponent as DiagramIcon } from './svg/Diagram.svg'
 
+
+export const drawerItems = [
+  {
+    title: 'Components',
+    items: [
+      {
+        title: 'Layout',
+        items: [
+          {
+            title: 'Box',
+            contents: (
+              <div>box content</div>
+            )
+          },
+          {
+            title: 'Container',
+            contents: (
+              <div>container content</div>
+            )
+          },
+          {
+            title: 'Grid',
+            contents: (
+              <div>grid content</div>
+            )
+          },
+          {
+            title: 'Grid List',
+            contents: (
+              <div>grid list content</div>
+            )
+          },
+          {
+            title: 'Hidden',
+            contents: (
+              <div>hidden content</div>
+            )
+          }
+        ]
+      },
+      {
+        title: 'Inputs',
+        items: [
+          {
+            title: 'Button',
+            contents: (
+              <div>button content</div>
+            )
+          }
+        ]
+      }
+    ]
+  }
+]
+
+export const nestedItemOverrides = {
+  tag: {
+    equus: {
+      icon: <HorseIcon width="100%" height="2em" />,
+      title: 'Equus'
+    },
+    elephantus: {
+      icon: <ElephantIcon width="100%" height="2em" />,
+      title: 'Elephantus'
+    },
+    unicornis: {
+      icon: <UnicornIcon width="100%" height="2em" />,
+      title: 'Unicornis'
+    },
+    parent: {
+      icon: <MoreIcon width="100%" height="2em" />
+    }
+  }
+}
+
 const equusItem = {
   tag: 'equus',
   title: '🐴',
@@ -206,23 +281,3 @@ export const nestedItems = [
   elephantusItem,
   unicornisItem
 ]
-
-export const nestedItemOverrides = {
-  tag: {
-    equus: {
-      icon: <HorseIcon width="100%" height="2em" />,
-      title: 'Equus'
-    },
-    elephantus: {
-      icon: <ElephantIcon width="100%" height="2em" />,
-      title: 'Elephantus'
-    },
-    unicornis: {
-      icon: <UnicornIcon width="100%" height="2em" />,
-      title: 'Unicornis'
-    },
-    parent: {
-      icon: <MoreIcon width="100%" height="2em" />
-    }
-  }
-}

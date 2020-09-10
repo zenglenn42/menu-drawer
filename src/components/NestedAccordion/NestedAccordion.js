@@ -103,7 +103,7 @@ const AccordionButton = styled('button')(
     cursor: 'pointer',
     flex: 1,
     padding: 0,
-    fontSize: 20,
+    fontSize: 14,
     border: 'none',
     backgroundColor: 'unset'
     // Feels a bit annoying, actually.
@@ -151,9 +151,9 @@ function createButton(
         >
           {icon ? <span style={{ marginRight: '1em' }}>{icon}</span> : <></>}
           <span
-          // style={{
-          //   fontWeight: isOpen ? 'bold' : null
-          // }}
+          style={{
+            fontWeight: isOpen ? 'bold' : null
+          }}
           >
             {text}
           </span>
@@ -171,10 +171,10 @@ function createEmptyItem(depth, index) {
 
 function isVisible(item, expandedItems = [], allItems) {
   // Item has no parent so can't be occluded by that.
-  if (!item.parent) return true
+  if (item.parent === undefined) return true
 
   // Item has a parent but expandedItems is undefined.
-  if (item.parent && expandedItems === undefined) return false
+  if ((item.parent !== undefined) && expandedItems === undefined) return false
 
   // Item is visible if all its parents are expanded.
   const parentItem = allItems[item.parent]
@@ -194,6 +194,7 @@ function nestedLayoutReducer(components, action) {
               key={`${item.depth}_${item.title}_${index}`}
               direction="vertical"
               indent={item.depth}
+              // style={{backgroundColor: 'red'}}
             >
               {createButton(
                 index,
