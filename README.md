@@ -105,7 +105,7 @@ I find a [minor logic](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00
 
 ## [Add some text styling](#contents)
 
-I'd expanded items in the menu drawer to be in [bold text](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f56b385b96fa12f8bb497ae054c2d3/src/components/NestedAccordion/NestedAccordion.js#L155).
+I'd like expanded items in the menu drawer to be in [bold text](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f56b385b96fa12f8bb497ae054c2d3/src/components/NestedAccordion/NestedAccordion.js#L155).
 
 ## [Next steps](#contents)
 
