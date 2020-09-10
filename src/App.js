@@ -2,7 +2,7 @@ import React from 'react'
 import { FaGithubAlt as GithubIcon } from 'react-icons/fa'
 import { BsFillBriefcaseFill as PortfolioIcon } from 'react-icons/bs'
 import { Accordion } from './components/Accordion/Accordion'
-import { drawerItems } from './api/inputdata'
+import { drawerItems, nestedItems, nestedItemOverrides } from './api/inputdata'
 import {
   nestedItemsClosure,
   nestedLayoutReducer,
@@ -29,12 +29,24 @@ function App() {
       <div style={appFrame}>
         <header style={header}>
           <p style={headerTitle}>Menu Drawer</p>
-          <p style={headerSubTitle}>Case Study Demo</p>
+          <p style={headerSubTitle}>Case Study: Transform an Accordion into a Menu Drawer</p>
         </header>
         <div style={grow} />
         <main style={main}>
           <article style={article}>
-            <header style={articleTitle}>Menu Drawer</header>
+            <header style={articleTitle}>Before: Nested Accordion</header>
+            <div style={accordion}>
+              <Accordion
+                items={nestedItems}
+                initialExpandedItems={[1]}
+                inputItemsReducer={nestedItemsClosure(nestedItemOverrides)}
+                layoutReducer={nestedLayoutReducer}
+                expansionReducer={singlePeerExpandedReducer}
+              />
+            </div>
+          </article>
+          <article style={article}>
+            <header style={articleTitle}>After: Menu Drawer</header>
             <div style={accordion}>
               <Accordion
                 items={drawerItems}
