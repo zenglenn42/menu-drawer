@@ -61,7 +61,7 @@ function App() {
           </a>
           <a
             style={iconButton}
-            href="https://github.com/zenglenn42/inversion-of-control/blob/master/README.md"
+            href="https://github.com/zenglenn42/menu-drawer/blob/master/README.md"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="github"
