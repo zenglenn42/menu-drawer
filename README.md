@@ -1,4 +1,4 @@
-## Menu Drawer [(demo)](https://menus-drawer.herokuapp.com/)
+## Menu Drawer [(demo)](https://menu-drawer.herokuapp.com/)
 
 ### _Nested Accordion + ~2 hours === Menu Drawer_
 
