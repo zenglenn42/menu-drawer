@@ -2,7 +2,7 @@ import React from 'react'
 import { FaGithubAlt as GithubIcon } from 'react-icons/fa'
 import { BsFillBriefcaseFill as PortfolioIcon } from 'react-icons/bs'
 import { Accordion } from './components/Accordion/Accordion'
-import { items, nestedItems, nestedItemOverrides } from './api/inputdata'
+import { nestedItems, nestedItemOverrides } from './api/inputdata'
 import {
   nestedItemsClosure,
   nestedLayoutReducer,
