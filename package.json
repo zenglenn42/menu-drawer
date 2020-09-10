@@ -1,0 +1,56 @@
+{
+  "name": "menu-drawer",
+  "version": "0.1.0",
+  "disableHostCheck": true,
+  "homepage": "https://menu-drawer.herokuapp.com",
+  "bugs": "https://github.com/zenglenn42/menu-drawer/issues",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zenglenn42/menu-drawer.git"
+  },
+  "engines": {
+    "node": "12.x",
+    "yarn": "^1.22.4"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.34",
+    "@emotion/styled": "^10.0.27",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "emotion": "^10.0.27",
+    "framer-motion": "^2.6.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-icons": "^3.11.0",
+    "react-scripts": "3.4.3",
+    "rollup": "^2.26.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start:offline": "react-scripts start --prefer-offline --offline",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "yarn install && yarn run build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
+  }
+}
