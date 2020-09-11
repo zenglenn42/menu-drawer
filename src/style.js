@@ -53,7 +53,7 @@ export const article = {
   borderRadius: '.15em',
   color: 'inherit',
   margin: '1em 2em',
-  border: '0.4em solid #424242',
+  border: '0.4em solid #929292',
   overflow: 'none',
 }
 
@@ -68,7 +68,7 @@ export const article2 = {
   borderRadius: '.15em',
   color: 'inherit',
   margin: '1em 2em',
-  border: '0.4em solid #424242',
+  border: '0.4em solid #929292',
   overflow: 'none',
 }
 
