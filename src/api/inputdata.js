@@ -22,12 +22,6 @@ export const drawerItems = [
             )
           },
           {
-            title: 'Container',
-            contents: (
-              <div>container content</div>
-            )
-          },
-          {
             title: 'Grid',
             contents: (
               <div>grid content</div>

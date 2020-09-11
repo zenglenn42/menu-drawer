@@ -40,7 +40,6 @@ export const main = {
   justifyContent: 'space-evenly',
   flexWrap: 'wrap',
   alignContent: 'flex-start',
-  overflow: 'auto scroll',
   color: 'inherit'
 }
 
@@ -50,11 +49,26 @@ export const article = {
   justifyContent: 'flex-start',
   alignItems: 'flex-start',
   minWidth: '17rem',
-  maxWidth: '27rem',
+  maxWidth: '23rem',
   borderRadius: '.15em',
   color: 'inherit',
   margin: '1em 2em',
-  border: '0.4em solid #424242'
+  border: '0.4em solid #424242',
+  overflow: 'none',
+}
+
+export const article2 = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+  alignItems: 'flex-start',
+  minWidth: '40rem',
+  maxWidth: '40rem',
+  borderRadius: '.15em',
+  color: 'inherit',
+  margin: '1em 2em',
+  border: '0.4em solid #424242',
+  overflow: 'none',
 }
 
 export const articleTitle = {
@@ -72,6 +86,21 @@ export const accordion = {
   color: 'black',
   flexGrow: 0,
   width: '100%',
+}
+
+export const drawer = {
+  display: 'flex',
+  minWidth: '180px',
+  justifyContent: 'center',
+  minHeight: '50vh',
+  maxHeight: '50vh',
+  backgroundColor: '#eee',
+  color: 'black',
+  flexGrow: 0,
+  width: '100%',
+  overflow: 'auto scroll',
+  flex: 1,
+  borderRight: '1px solid #ccc'
 }
 
 export const footer = {

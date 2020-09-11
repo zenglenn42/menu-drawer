@@ -10,11 +10,13 @@ import {
 } from './components/NestedAccordion/NestedAccordion'
 import {
   appFrame,
+  drawer,
   header,
   headerTitle,
   headerSubTitle,
   main,
   article,
+  article2,
   articleTitle,
   accordion,
   footer,
@@ -22,6 +24,8 @@ import {
   grow,
   grow2x
 } from './style.js'
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import { Content } from './components/Content'
 
 function App() {
   return (
@@ -34,7 +38,7 @@ function App() {
         <div style={grow} />
         <main style={main}>
           <article style={article}>
-            <header style={articleTitle}>Before: Nested Accordion</header>
+            <header style={articleTitle}>Nested Accordion</header>
             <div style={accordion}>
               <Accordion
                 items={nestedItems}
@@ -45,17 +49,32 @@ function App() {
               />
             </div>
           </article>
-          <article style={article}>
-            <header style={articleTitle}>After: Menu Drawer</header>
-            <div style={accordion}>
-              <Accordion
-                items={drawerItems}
-                initialExpandedItems={[0, 1, 7]}
-                inputItemsReducer={nestedItemsClosure()}
-                layoutReducer={nestedLayoutReducer}
-                expansionReducer={singlePeerExpandedReducer}
-              />
-            </div>
+          <article style={article2}>
+            <Router>
+              <header style={articleTitle}>Menu Drawer</header>
+              <main style={{display: 'flex', flexDirection: 'row', overflow: 'hidden', width: '100%'}}>
+                <div style={drawer}>
+                  <Accordion
+                    items={drawerItems}
+                    initialExpandedItems={[0, 1, 7]}
+                    inputItemsReducer={nestedItemsClosure()}
+                    layoutReducer={nestedLayoutReducer}
+                    expansionReducer={singlePeerExpandedReducer}
+                  />
+                </div>
+                <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>
+                  <Switch>
+                    <Route
+                        exact
+                        from="/"
+                        render={(props) => (
+                            <Content {...props} text="content" />
+                        )}  
+                    />  
+                  </Switch>
+                </div>
+              </main>
+            </Router>
           </article>
         </main>
         <div style={grow2x} />
