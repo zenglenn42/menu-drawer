@@ -33,7 +33,8 @@ function App() {
       <div style={appFrame}>
         <header style={header}>
           <p style={headerTitle}>Menu Drawer</p>
-          <p style={headerSubTitle}>Case Study: Transform an Accordion into a Menu Drawer</p>
+          <p style={headerSubTitle}>Case Study</p>
+          <p style={headerSubTitle}>Transform an Accordion into a Menu Drawer</p>
         </header>
         <div style={grow} />
         <main style={main}>

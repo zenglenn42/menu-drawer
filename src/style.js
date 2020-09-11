@@ -64,6 +64,7 @@ export const article2 = {
   alignItems: 'flex-start',
   minWidth: '17rem',
   maxWidth: '23rem',
+  width: '23rem',
   borderRadius: '.15em',
   color: 'inherit',
   margin: '1em 2em',
