@@ -108,7 +108,7 @@ I find a [minor logic](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00
 
 ## [Add some text styling](#contents)
 
-I'd like expanded items in the menu drawer to be in [bold text](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f56b385b96fa12f8bb497ae054c2d3/src/components/NestedAccordion/NestedAccordion.js#L155).
+I confer [bold text](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f56b385b96fa12f8bb497ae054c2d3/src/components/NestedAccordion/NestedAccordion.js#L155) upon expanded menu drawer items.
 
 ## [Add application routes](#contents)
 
@@ -231,9 +231,9 @@ The expand / collapse behavior for a menu drawer is slightly different from the 
 
 We still want basic accordion behavior when a menu category or sub-category is clicked open or closed.  However, for so called _leaf node_ items (e.g., `Box`, `Grid`), we don't really need to toggle between an `open` or `closed` state.  We simply want react-router to render the associated component for the the `leaf node`'s route.
 
-In otherwords, routable menu items don't need tracking in the `expandedItems` array maintained by `useExpandable`.
+In otherwords, routable menu items don't need tracking in the `expandedItems` array maintained by [useExpandable](https://github.com/zenglenn42/menu-drawer/blob/6d092fd7ae9e12df55fe0ac1cc71f43819ebb0c7/src/components/Accordion/useExpandable.js#L91).
 
-This implies a need to override the accordion's expansionReducer with route-sensitive logic.
+This implies a need to override the accordion's expansionReducer with [route-sensitive logic](https://github.com/zenglenn42/menu-drawer/blob/6d092fd7ae9e12df55fe0ac1cc71f43819ebb0c7/src/components/MenuDrawer/MenuDrawer.js#L176).
 
 You can see the code [here](https://github.com/zenglenn42/menu-drawer/blob/41707d7ecff610e6579253c52f2921e6b94e3be0/src/components/MenuDrawer/MenuDrawer.js#L126).
 
@@ -256,7 +256,7 @@ We could probably craft a new `<MenuAccordion>` component to integrate the routi
 ```
 ## [Summary](#contents)
 
-By altering the input data schema and customizing two reducers, I morphed a nested accordion into a `React Router-ready` menu drawer using some inversion-of-control ideas introduced [here](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md).  It took about 200 lines of code plus some router boilerplate.
+By altering the input data schema and customizing two reducers, I morphed a nested accordion into a `React Router-ready` menu drawer using some inversion-of-control ideas introduced [here](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md).  It took about 200 lines of code plus some router boilerplate. No new state variables were required.
 
 I used _way_ too many inline styles, but that can be cleaned up in post. ;-)
 I've got something I can start integrating into other projects of mine.
