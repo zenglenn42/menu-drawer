@@ -49,7 +49,7 @@ Then I setup my deployment path
 ## [Just add data](#contents)
 
 The Accordion is data-driven so I populate `inputdata.js` with the desired menu text.
-(I'm using the Material-UI menu as a template.)
+(I'm using the [Material-UI menu](https://material-ui.com/) as a template.)
 
 ```javascript
 # src/api/inpustdata.js
@@ -235,7 +235,7 @@ In otherwords, routable menu items don't need tracking in the `expandedItems` ar
 
 This implies a need to override the accordion's expansionReducer with route-sensitive logic.
 
-You can see the code under src/components/MenuDrawer/MenuDrawer.js
+You can see the code [here](https://github.com/zenglenn42/menu-drawer/blob/41707d7ecff610e6579253c52f2921e6b94e3be0/src/components/MenuDrawer/MenuDrawer.js#L126).
 
 ### Menu Accordion?
 
