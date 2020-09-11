@@ -17,27 +17,19 @@ export const drawerItems = [
         items: [
           {
             title: 'Box',
-            contents: (
-              <div>box content</div>
-            )
+            route: '/box'
           },
           {
             title: 'Grid',
-            contents: (
-              <div>grid content</div>
-            )
+            route: '/grid'
           },
           {
             title: 'Grid List',
-            contents: (
-              <div>grid list content</div>
-            )
+            route: '/gridlist'
           },
           {
             title: 'Hidden',
-            contents: (
-              <div>hidden content</div>
-            )
+            route: '/hidden'
           }
         ]
       },
@@ -46,9 +38,7 @@ export const drawerItems = [
         items: [
           {
             title: 'Button',
-            contents: (
-              <div>button content</div>
-            )
+            route: '/button'
           }
         ]
       }

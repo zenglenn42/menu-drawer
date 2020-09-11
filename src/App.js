@@ -9,6 +9,10 @@ import {
   singlePeerExpandedReducer
 } from './components/NestedAccordion/NestedAccordion'
 import {
+  menuLayoutReducer,
+  menuExpandedReducer
+} from './components/MenuDrawer/MenuDrawer'
+import {
   appFrame,
   drawer,
   header,
@@ -57,10 +61,10 @@ function App() {
                 <div style={drawer}>
                   <Accordion
                     items={drawerItems}
-                    initialExpandedItems={[0, 1, 7]}
+                    initialExpandedItems={[0, 1, 6]}
                     inputItemsReducer={nestedItemsClosure()}
-                    layoutReducer={nestedLayoutReducer}
-                    expansionReducer={singlePeerExpandedReducer}
+                    layoutReducer={menuLayoutReducer}
+                    expansionReducer={menuExpandedReducer}
                   />
                 </div>
                 <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>
@@ -69,8 +73,14 @@ function App() {
                         exact
                         from="/"
                         render={(props) => (
-                            <Content {...props} text="content" />
+                            <Content {...props} text="select a menu item" />
                         )}  
+                    />  
+                    <Route
+                        from="/"
+                        render={(props) => {
+                            return <Content {...props} text={`route = ${props.location.pathname}`} />
+                        }}  
                     />  
                   </Switch>
                 </div>

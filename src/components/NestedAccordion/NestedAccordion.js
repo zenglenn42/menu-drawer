@@ -194,7 +194,6 @@ function nestedLayoutReducer(components, action) {
               key={`${item.depth}_${item.title}_${index}`}
               direction="vertical"
               indent={item.depth}
-              // style={{backgroundColor: 'red'}}
             >
               {createButton(
                 index,
@@ -299,4 +298,13 @@ function singlePeerExpandedReducer(state, action) {
   }
 }
 
-export { nestedItemsClosure, nestedLayoutReducer, singlePeerExpandedReducer }
+export { 
+  nestedItemsClosure, 
+  nestedLayoutReducer, 
+  singlePeerExpandedReducer,
+  isVisible,
+  AccordionButton,
+  AccordionItem,
+  createContents,
+  createEmptyItem
+}
