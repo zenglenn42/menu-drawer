@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const actionTypes = { toggle_index: 'toggle_index' }
 
@@ -84,8 +84,11 @@ function useExpandable({
     focalIndex: undefined
   },
   reducer = permissiveReducer,
-  items = []
+  items = [],
+  focalIndexChangeCallback = () => {},
+  history = {}
 } = {}) {
+
   const memoizedReducer = React.useCallback(reducer, [])
   const [
     state = { expandedItems: [], focalIndex: undefined },
@@ -100,6 +103,9 @@ function useExpandable({
       allItems: items
     })
   }
+
+  const memoizedFocalIndexChange = React.useCallback(focalIndexChangeCallback)
+  useEffect(()=> memoizedFocalIndexChange(focalIndex, items, history))
 
   return { expandedItems, focalIndex, toggleItemFn }
 }

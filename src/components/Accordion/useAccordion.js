@@ -146,7 +146,9 @@ function useAccordion({
   expansionReducer = dfltExpansionReducer,
   items = [],
   initialExpandedItems = [],
-  initialFocalIndex = undefined
+  initialFocalIndex = undefined,
+  focalIndexChangeCallback = () => {},
+  history = {}
 } = {}) {
   const normalizedItems = useRef(inputItemsReducer(items))
   const initialState = {
@@ -156,7 +158,9 @@ function useAccordion({
   const { expandedItems, focalIndex, toggleItemFn } = useExpandable({
     initialState,
     reducer: expansionReducer,
-    items: normalizedItems.current
+    items: normalizedItems.current,
+    focalIndexChangeCallback: focalIndexChangeCallback,
+    history: history
   })
   const memoizedToggleItem = useCallback(toggleItemFn, [])
 

@@ -10,7 +10,8 @@ import {
 } from './components/NestedAccordion/NestedAccordion'
 import {
   menuLayoutReducer,
-  menuExpandedReducer
+  menuExpandedReducer,
+  focalIndexChangeCallback
 } from './components/MenuDrawer/MenuDrawer'
 import {
   appFrame,
@@ -28,10 +29,12 @@ import {
   grow,
   grow2x
 } from './style.js'
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import { Switch, Route, Router } from 'react-router-dom'
 import { Content } from './components/Content'
+import { createBrowserHistory } from 'history'
 
 function App() {
+  const history = createBrowserHistory()
   return (
     <>
       <div style={appFrame}>
@@ -55,16 +58,19 @@ function App() {
             </div>
           </article>
           <article style={article2}>
-            <Router>
+            <Router history={history}>
               <header style={articleTitle}>Menu Drawer</header>
               <main style={{display: 'flex', flexDirection: 'row', overflow: 'hidden', width: '100%'}}>
                 <div style={drawer}>
                   <Accordion
                     items={drawerItems}
                     initialExpandedItems={[0, 1, 6]}
+                    // initialFocalIndex={2}
                     inputItemsReducer={nestedItemsClosure()}
                     layoutReducer={menuLayoutReducer}
                     expansionReducer={menuExpandedReducer}
+                    focalIndexChangeCallback={focalIndexChangeCallback}
+                    history={history}
                   />
                 </div>
                 <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>

@@ -10,7 +10,6 @@ import {
   createContents,
   createEmptyItem
 } from '../NestedAccordion/NestedAccordion'
-import { Link } from 'react-router-dom'
 
 // The following adds menu drawer behavior to a Nested Accordion component using
 // inversion-of-control principle.
@@ -46,7 +45,6 @@ function createMenuButton(
   }
 
   return (
-    <Link to={(hasRoute) ? route : focalRoute}>
     <AccordionButton isOpen={isOpen} onClick={() => toggleFn(index)}>
       <div
         style={{
@@ -72,7 +70,6 @@ function createMenuButton(
         {expanderIcon}
       </div>{' '}
     </AccordionButton>
-    </Link>
   )
 }
 
@@ -203,4 +200,24 @@ function menuExpandedReducer(state, action) {
   }
 }
 
-export { menuLayoutReducer, menuExpandedReducer }
+// ----------------------------------------------------------------------------
+// focalIndex change
+// ----------------------------------------------------------------------------
+
+// I'm using history.push() instead of instrumenting layout components
+// with <Link to={route}> since the former allows us to /drive/ focalIndex
+// programmatically instead of just in response to clicks.
+
+function focalIndexChangeCallback(index, items, history) {
+  if (index) {
+    const route = items[index].route
+    const hasRoute = (route !== undefined)
+    if (hasRoute) {
+      if (history && history.push) {
+        history.push(route)
+      }
+    }
+  } 
+}
+
+export { menuLayoutReducer, menuExpandedReducer, focalIndexChangeCallback }
