@@ -70,7 +70,6 @@ function App() {
                     layoutReducer={menuLayoutReducer}
                     expansionReducer={menuExpandedReducer}
                     focalIndexChangeCallback={focalIndexChangeCallback}
-                    history={history}
                   />
                 </div>
                 <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>

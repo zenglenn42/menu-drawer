@@ -148,7 +148,6 @@ function useAccordion({
   initialExpandedItems = [],
   initialFocalIndex = undefined,
   focalIndexChangeCallback = () => {},
-  history = {}
 } = {}) {
   const normalizedItems = useRef(inputItemsReducer(items))
   const initialState = {
@@ -160,7 +159,6 @@ function useAccordion({
     reducer: expansionReducer,
     items: normalizedItems.current,
     focalIndexChangeCallback: focalIndexChangeCallback,
-    history: history
   })
   const memoizedToggleItem = useCallback(toggleItemFn, [])
 
