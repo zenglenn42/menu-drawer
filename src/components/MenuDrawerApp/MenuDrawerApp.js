@@ -8,7 +8,8 @@ import {
     menuLayoutReducer,
     menuExpandedReducer,
     focalIndexChangeCallback,
-    menuItemsReducer
+    menuItemsReducer,
+    getIndexFromRoute
 } from '../MenuDrawer/MenuDrawer'
 
 function MenuDrawerApp(props) {
@@ -41,7 +42,9 @@ function MenuDrawerApp(props) {
                         <Route
                             from="/"
                             render={(props) => {
-                                return <Content {...props} text={`route = ${props.location.pathname}`} />
+                                const route = props.location.pathname
+                                // console.log('focalIndex =', getIndexFromRoute(route, flatMenuItems))
+                                return <Content {...props} text={`route = ${route}`} />
                             }}  
                         />  
                     </Switch>

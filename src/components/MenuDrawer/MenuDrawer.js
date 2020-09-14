@@ -25,7 +25,6 @@ function menuItemsReducer(nestedItems, depth = 0, acc = [], parent) {
       acc.push({
         icon: item.icon,
         title: item.title,
-        contents: undefined,
         depth: depth,
         parent: parent
       })
@@ -41,6 +40,14 @@ function menuItemsReducer(nestedItems, depth = 0, acc = [], parent) {
     return acc
   }, acc)
   return flattenedItems
+}
+
+function getIndexFromRoute(route, flatItems) {
+  const matchingIndex = flatItems.reduce((acc, item, index) => {
+    acc = (route === item.route && item.route !== undefined) ? index : acc
+    return acc
+  }, -1)
+  return matchingIndex
 }
 
 // ----------------------------------------------------------------------------
@@ -249,4 +256,4 @@ function focalIndexChangeCallback(index, items, history) {
   } 
 }
 
-export { menuItemsReducer, menuLayoutReducer, menuExpandedReducer, focalIndexChangeCallback }
+export { menuItemsReducer, menuLayoutReducer, menuExpandedReducer, focalIndexChangeCallback, getIndexFromRoute }
