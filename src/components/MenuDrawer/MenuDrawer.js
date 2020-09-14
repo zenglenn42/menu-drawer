@@ -15,6 +15,35 @@ import {
 // inversion-of-control principle.
 
 // ----------------------------------------------------------------------------
+// Input Reduction
+// ----------------------------------------------------------------------------
+
+function menuItemsReducer(nestedItems, depth = 0, acc = [], parent) {
+  const flattenedItems = nestedItems.reduce((acc, item, index) => {
+    const hasNestedItems = item.items
+    if (hasNestedItems) {
+      acc.push({
+        icon: item.icon,
+        title: item.title,
+        contents: undefined,
+        depth: depth,
+        parent: parent
+      })
+      const newParent = acc.length - 1
+      return menuItemsReducer(item.items, depth + 1, acc, newParent)
+    } else {
+      acc.push({
+        ...item,
+        depth: depth,
+        parent: parent
+      })
+    }
+    return acc
+  }, acc)
+  return flattenedItems
+}
+
+// ----------------------------------------------------------------------------
 // Layout
 // ----------------------------------------------------------------------------
 
@@ -220,4 +249,4 @@ function focalIndexChangeCallback(index, items, history) {
   } 
 }
 
-export { menuLayoutReducer, menuExpandedReducer, focalIndexChangeCallback }
+export { menuItemsReducer, menuLayoutReducer, menuExpandedReducer, focalIndexChangeCallback }

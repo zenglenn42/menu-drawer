@@ -7,8 +7,7 @@ import { ReactComponent as UnicornIcon } from './svg/Unicorn.svg'
 import { ReactComponent as MoreIcon } from './svg/MoreDots.svg'
 import { ReactComponent as DiagramIcon } from './svg/Diagram.svg'
 
-
-export const drawerItems = [
+export const menuItems = [
   {
     title: 'Components',
     items: [

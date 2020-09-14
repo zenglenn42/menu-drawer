@@ -2,20 +2,14 @@ import React from 'react'
 import { FaGithubAlt as GithubIcon } from 'react-icons/fa'
 import { BsFillBriefcaseFill as PortfolioIcon } from 'react-icons/bs'
 import { Accordion } from './components/Accordion/Accordion'
-import { drawerItems, nestedItems, nestedItemOverrides } from './api/inputdata'
+import { menuItems, nestedItems, nestedItemOverrides } from './api/inputdata'
 import {
   nestedItemsClosure,
   nestedLayoutReducer,
   singlePeerExpandedReducer
 } from './components/NestedAccordion/NestedAccordion'
 import {
-  menuLayoutReducer,
-  menuExpandedReducer,
-  focalIndexChangeCallback
-} from './components/MenuDrawer/MenuDrawer'
-import {
   appFrame,
-  drawer,
   header,
   headerTitle,
   headerSubTitle,
@@ -29,12 +23,9 @@ import {
   grow,
   grow2x
 } from './style.js'
-import { Switch, Route, Router } from 'react-router-dom'
-import { Content } from './components/Content'
-import { createBrowserHistory } from 'history'
+import MenuDrawerApp from './components/MenuDrawerApp/MenuDrawerApp'
 
 function App() {
-  const history = createBrowserHistory()
   return (
     <>
       <div style={appFrame}>
@@ -58,39 +49,12 @@ function App() {
             </div>
           </article>
           <article style={article2}>
-            <Router history={history}>
-              <header style={articleTitle}>Menu Drawer</header>
-              <main style={{display: 'flex', flexDirection: 'row', overflow: 'hidden', width: '100%'}}>
-                <div style={drawer}>
-                  <Accordion
-                    items={drawerItems}
-                    initialExpandedItems={[0, 1, 6]}
-                    // initialFocalIndex={2}
-                    inputItemsReducer={nestedItemsClosure()}
-                    layoutReducer={menuLayoutReducer}
-                    expansionReducer={menuExpandedReducer}
-                    focalIndexChangeCallback={focalIndexChangeCallback}
-                  />
-                </div>
-                <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>
-                  <Switch>
-                    <Route
-                        exact
-                        from="/"
-                        render={(props) => (
-                            <Content {...props} text="select a menu item" />
-                        )}  
-                    />  
-                    <Route
-                        from="/"
-                        render={(props) => {
-                            return <Content {...props} text={`route = ${props.location.pathname}`} />
-                        }}  
-                    />  
-                  </Switch>
-                </div>
-              </main>
-            </Router>
+            <MenuDrawerApp 
+                items={menuItems} 
+                title="Menu Drawer"
+                initialExpandedItems={[0, 1, 6]}
+                initialFocalIndex={2}
+            />
           </article>
         </main>
         <div style={grow2x} />
