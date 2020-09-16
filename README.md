@@ -12,9 +12,9 @@
 - [Just add data](#just-add-data)
 - [Fix regressions](#fix-regressions)
 - [Dev Work](#dev-work)
+  - [Update schema with routes](#update-schema-with-routes)
   - [Add some text styling](#add-some-text-styling)
   - [Route drives content](#route-drives-content)
-  - [Add routes to input data](#add-routes-to-input-data)
   - [Menu Layout Reducer](#menu-layout-reducer)
   - [Menu Expansion Reducer](#menu-expansion-reducer)
   - [Let routes drive focal index](#let-routes-drive-focal-index)
@@ -115,6 +115,37 @@ I find a [minor logic](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00
 
 Most of the feature work revolves around styling idioms typical of menu drawers and integration with React Router (so item selection can drive an adjacent content window).
 
+### [Update schema with routes](#contents)
+
+Accordions don't have routes, just text `content` that comes from the input data.  I alter the schema to support menu selection route:
+
+```javascript
+# src/api/inputdata.js
+
+export const drawerItems = [ 
+  {
+    title: 'Components',
+    items: [
+      {   
+        title: 'Layout',
+        items: [
+          {
+            title: 'Box',
+            route: '/box'  // <--
+          },
+          {
+            title: 'Grid',
+            route: '/grid' // <--
+          },
+          ..
+        ]
+      },
+      ..
+    ]
+  }
+]
+```
+
 ### [Add some text styling](#contents)
 
 I confer [bold text](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f56b385b96fa12f8bb497ae054c2d3/src/components/NestedAccordion/NestedAccordion.js#L155) upon expanded menu drawer items.
@@ -167,36 +198,6 @@ function App() {
 
 ```
 
-### [Add routes to input data](#contents)
-
-Accordions don't have routes, just text `content` that comes from the input data.  I alter the schema to support menu selection route:
-
-```javascript
-# src/api/inputdata.js
-
-export const drawerItems = [ 
-  {
-    title: 'Components',
-    items: [
-      {   
-        title: 'Layout',
-        items: [
-          {
-            title: 'Box',
-            route: '/box'  // <--
-          },
-          {
-            title: 'Grid',
-            route: '/grid' // <--
-          },
-          ..
-        ]
-      },
-      ..
-    ]
-  }
-]
-```
 
 ### [Menu Layout Reducer](#contents)
 
