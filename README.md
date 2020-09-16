@@ -169,7 +169,7 @@ function App() {
 
 ### [Add routes to input data](#contents)
 
-Accordions don't have routes, just text `content` that comes from the input data.  I alter the schema to support routes associated with menu selections:
+Accordions don't have routes, just text `content` that comes from the input data.  I alter the schema to support menu selection route:
 
 ```javascript
 # src/api/inputdata.js
@@ -255,8 +255,8 @@ React router does that right thing and displays corresponding content for that r
 
 We need focalIndex to be driven by menu clicks &nbsp; `and by ...`
 
-* routes specified in the url
-  * e.g., https://menu-drawer.herokuapp.com`/box`
+* application routes specified in the url
+  * `/box` in `https://menu-drawer.herokuapp.com/box`
 
 
 I'm mindful of inversion-of-control and would like avoid mutating low-level components, but my earlier decision (taken with the NestedAccordion) to add `focalIndex` to the state managed by `useExpandable` presents a slippery slope.  There's just a lot less impedance if I augment the reducer therein with a `set_focal_index` action and export a corresponding helper function similar to what we're alreadying doing with `toggleItemFn`.  This doesn't break old accordions since we're adding new functionality, not changing a legacy interface.
@@ -333,7 +333,7 @@ function MenuDrawerApp(props) {
     )
 ```
 
-To finish the story, the `<Content>` component invokes `setFocalIndexFn` since it has awareness of the current route.  (A simple helper function returns the desired menu item index that corresponds to the current route.)
+To finish the story, the `<Content>` component invokes `setFocalIndexFn` since it has awareness of the current route.  (A simple helper function returns the desired menu item index given the current route.)
 
 ```javascript
 # Content.js
