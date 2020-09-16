@@ -53,7 +53,6 @@ function App() {
                 items={menuItems} 
                 title="Menu Drawer"
                 initialExpandedItems={[0, 1, 6]}
-                // initialFocalIndex={2}
             />
           </article>
         </main>

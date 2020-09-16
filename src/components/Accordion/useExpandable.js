@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import React from 'react'
 
-const actionTypes = { toggle_index: 'toggle_index' }
+const actionTypes = { 
+  toggle_index: 'toggle_index',
+  set_focal_index: 'set_focal_index' 
+}
 
 function nonTrivialResults(state) {
   return state && state.expandedItems.length
@@ -44,6 +46,11 @@ function permissiveReducer(state, action) {
         nextFocalIndex = action.index // make this the new focal index
       }
       return { expandedItems: nextExpandedItems, focalIndex: nextFocalIndex } // return a single open item
+    }
+    case actionTypes.set_focal_index: {
+      const hasRoute = action.allItems[action.index].route
+      const nextFocalIndex = (hasRoute) ? action.index : focalIndex
+      return { ...state, focalIndex: nextFocalIndex }
     }
     default: {
       throw new Error(
@@ -104,11 +111,35 @@ function useExpandable({
     })
   }
 
-  const memoizedFocalIndexChange = React.useCallback(focalIndexChangeCallback)
-  const history = useHistory()
-  useEffect(()=> memoizedFocalIndexChange(focalIndex, items, history))
+  // Allow focal index to be set programmatically (instead of simply through
+  // toggle clicks).  This is especially useful if you want the current route, 
+  // for example, to drive state.
 
-  return { expandedItems, focalIndex, toggleItemFn }
+  const setFocalIndexFn = (index) => {
+    if (typeof index === 'number' && index >= 0 && index < items.length) {
+
+      // Defensively dispatch only when state change expected.
+      //
+      // Otherwise you may hit this:
+      //
+      // 'Warning: Maximum update depth exceeded. This can happen when a 
+      //  component calls setState inside useEffect, but useEffect either 
+      //  doesn't have a dependency array, or one of the dependencies changes 
+      //  on every render.'
+      //
+
+      if (index !== focalIndex) {
+        // console.log('useExpandable: setFocalIndexFn', focalIndex, ' -> ', index)
+        dispatch({
+          type: actionTypes.set_focal_index,
+          index: index,
+          allItems: items
+        })
+      } 
+    }
+  }
+
+  return { expandedItems, focalIndex, toggleItemFn, setFocalIndexFn }
 }
 
 export {

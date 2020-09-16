@@ -1,51 +1,56 @@
 import React from 'react'
-import { Switch, Route, Router } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import { Content } from '../Content'
-import { Accordion } from '../Accordion/Accordion'
+import { useAccordion } from '../Accordion/useAccordion'
 import { articleTitle, drawer } from '../../style'
 import {
+    menuItemsReducer,
     menuLayoutReducer,
     menuExpandedReducer,
-    focalIndexChangeCallback,
-    menuItemsReducer,
     getIndexFromRoute
 } from '../MenuDrawer/MenuDrawer'
 
 function MenuDrawerApp(props) {
-    const { items, title, initialExpandedItems = [], initialFocalIndex } = props
+    const { items, title, initialExpandedItems = [] } = props
     const flatMenuItems = menuItemsReducer(items)
-    const history = createBrowserHistory()
+    const { components, setFocalIndexFn } = useAccordion({
+        items: flatMenuItems,
+        initialExpandedItems: initialExpandedItems,
+        layoutReducer: menuLayoutReducer,
+        expansionReducer: menuExpandedReducer
+    })
+    const Accordion = () => (<div style={{padding: '0 1em', width: '100%'}}>{components}</div>)
+
     return (
-        <Router history={history}>
+        <Router>
             <header style={articleTitle}>{title}</header>
             <main style={{display: 'flex', flexDirection: 'row', overflow: 'hidden', width: '100%'}}>
                 <div style={drawer}>
-                    <Accordion
-                        items={flatMenuItems}
-                        initialExpandedItems={initialExpandedItems}
-                        initialFocalIndex={initialFocalIndex}
-                        layoutReducer={menuLayoutReducer}
-                        expansionReducer={menuExpandedReducer}
-                        focalIndexChangeCallback={focalIndexChangeCallback}
-                    />
+                    <Accordion />
                 </div>
                 <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>
                     <Switch>
                         <Route
                             exact
                             from="/"
-                            render={(props) => (
-                                <Content {...props} text="select a menu item" />
-                            )}  
+                            render={(props) => {
+                                return <Content {...props} text="select a menu item" />
+                            }}  
                         />  
                         <Route
                             from="/"
-                            render={(props) => {
+                            render={ (props) => {
                                 const route = props.location.pathname
-                                // console.log('focalIndex =', getIndexFromRoute(route, flatMenuItems))
-                                return <Content {...props} text={`route = ${route}`} />
-                            }}  
+                                return (<Content 
+                                            {...props} 
+                                            route={route} 
+                                            getIndexFromRoute={getIndexFromRoute} 
+                                            flatMenuItems={flatMenuItems} 
+                                            setFocalIndexFn={setFocalIndexFn} 
+                                            text={`route = ${route}`} 
+                                        />)
+                                }
+                            }  
                         />  
                     </Switch>
                 </div>
