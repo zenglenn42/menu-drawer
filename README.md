@@ -10,9 +10,14 @@
 - [Overview](#overview)
 - [Bootstrap repos](#bootstrap-repos)
 - [Just add data](#just-add-data)
-- [Debug](#debug)
-- [Add some text styling](#add-text-styling)
-- [Add application routes](#add-application-routes)
+- [Fix regressions](#fix-regressions)
+- [Dev Work](#dev-work)
+  - [Add some text styling](#add-some-text-styling)
+  - [Route drives content](#route-drives-content)
+  - [Add routes to input data](#add-routes-to-input-data)
+  - [Menu Layout Reducer](#menu-layout-reducer)
+  - [Menu Expansion Reducer](#menu-expansion-reducer)
+  - [Let routes drive focal index](#let-routes-drive-focal-index)
 - [**Demo**](https://menu-drawer.herokuapp.com/) ☚
 - [Summary](#summary)
 
@@ -100,19 +105,21 @@ function App() {
 }
 ```
 
-## [Debug](#contents)
+## [Fix regressions](#contents)
 
 I find one CSS/JSS [styling issue](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f56b385b96fa12f8bb497ae054c2d3/src/components/Accordion/Accordion.js#L7) that horizontally trucates the menu within its parent accordion div.
 
 I find a [minor logic](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f56b385b96fa12f8bb497ae054c2d3/src/components/NestedAccordion/NestedAccordion.js#L174) issue affecting expansion attributes of child elements with 0-index parents.
 
-## [Add some text styling](#contents)
+## [Dev work](#contents)
+
+Most of the feature work revolves around styling idioms typical of menu drawers and integration with React Router (so item selection can drive an adjacent content window).
+
+### [Add some text styling](#contents)
 
 I confer [bold text](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f56b385b96fa12f8bb497ae054c2d3/src/components/NestedAccordion/NestedAccordion.js#L155) upon expanded menu drawer items.
 
-## [Add application routes](#contents)
-
-### React Router
+### [Route drives content](#contents)
 
 Menu drawer clicks typically drive application routes of some sort to request a new page from the server or to render content associated with a client-side route (typical with single page architecture).  In this case, it will be the former with clicks driving react-router:
 
@@ -160,12 +167,9 @@ function App() {
 
 ```
 
-### Input data
+### [Add routes to input data](#contents)
 
-Since routes are missing from the accordion, we need to add them.
-
-I start with the input data.  I replace the accordion `contents` field for a `route`
-field:
+Accordions don't have routes, just text `content` that comes from the input data.  I alter the schema to support routes associated with menu selections:
 
 ```javascript
 # src/api/inputdata.js
@@ -194,15 +198,17 @@ export const drawerItems = [
 ]
 ```
 
-### Menu Layout Reducer
+### [Menu Layout Reducer](#contents)
 
-Next, I update the layout of the menu items to include `<Link to='route'>` components to trigger react-router component rendering in response to selection clicks.
+I wrapper each menu item with a click-sensitive `<Link to={route}>` component which passes control to the router so route-sensitive content may be displayed.
 
 ```javascript
 function menuLayoutReducer(components, action) {
   switch (action.type) {
     case layoutActionTypes.map_items:
-      const focalRoute = (action.focalIndex === undefined) ? '/' : action.allItems[action.focalIndex].route
+      const focalRoute = (action.focalIndex === undefined) 
+          ? '/' 
+          : action.allItems[action.focalIndex].route
       return action.allItems.map((item, index) => {
         if (isVisible(item, action.expandedItems, action.allItems)) {
           return (
@@ -225,35 +231,127 @@ function menuLayoutReducer(components, action) {
 }
 ```
 
-### Expansion Reducer
+### [Menu Expansion Reducer](#contents)
 
-The expand / collapse behavior for a menu drawer is slightly different from the nested accordion component we're extending.
+The expand / collapse behavior for a menu drawer is slightly different from the `<NestedAccordion>` component we're extending.
 
-We still want basic accordion behavior when a menu category or sub-category is clicked open or closed.  However, for so called _leaf node_ items (e.g., `Box`, `Grid`), we don't really need to toggle between an `open` or `closed` state.  We simply want react-router to render the associated component for the the `leaf node`'s route.
+We still want basic accordion behavior when a menu category or sub-category is clicked open or closed.  However, for _leaf node_ items (e.g., `Box`, `Grid`), we simply want to select the item.  There's no concept of de-selecting or toggling `closed` in this case.  So we don't need to track the expanded state of routable menu selections in [useExpandable](https://github.com/zenglenn42/menu-drawer/blob/6d092fd7ae9e12df55fe0ac1cc71f43819ebb0c7/src/components/Accordion/useExpandable.js#L91).
 
-In otherwords, routable menu items don't need tracking in the `expandedItems` array maintained by [useExpandable](https://github.com/zenglenn42/menu-drawer/blob/6d092fd7ae9e12df55fe0ac1cc71f43819ebb0c7/src/components/Accordion/useExpandable.js#L91).
-
-This implies a need to override the accordion's expansionReducer with [route-sensitive logic](https://github.com/zenglenn42/menu-drawer/blob/6d092fd7ae9e12df55fe0ac1cc71f43819ebb0c7/src/components/MenuDrawer/MenuDrawer.js#L176).
+This implies a need to override the accordion's default expansionReducer with [route-sensitive logic](https://github.com/zenglenn42/menu-drawer/blob/6d092fd7ae9e12df55fe0ac1cc71f43819ebb0c7/src/components/MenuDrawer/MenuDrawer.js#L176).
 
 You can see the code [here](https://github.com/zenglenn42/menu-drawer/blob/41707d7ecff610e6579253c52f2921e6b94e3be0/src/components/MenuDrawer/MenuDrawer.js#L126).
 
-### Menu Accordion?
+## [Let routes drive focal index](#contents)
 
-We could probably craft a new `<MenuAccordion>` component to integrate the routing and custom reducers, but for now, I settle for expedient inlining and loading reducers through props:
+So, everything seems to be working.  
+
+Menu clicks are reaching `<Link to={route}>` components, triggering routes, and displaying new stuff in our content area.
+
+But there is a disturbance in the force.
+
+What if the user has *bookmarked* their favorite route and wants to return to that content the next day?  
+
+React router does that right thing and displays corresponding content for that route, but the menu drawer does not reflect that 'selection'. No nice blue bold text. It's an annoying fail for the user experience. &nbsp; :-(
+
+We need focalIndex to be driven by menu clicks &nbsp; `and by ...`
+
+* routes specified in the url
+  * e.g., https://menu-drawer.herokuapp.com`/box`
+
+
+I'm mindful of inversion-of-control and would like avoid mutating low-level components, but my earlier decision (taken with the NestedAccordion) to add `focalIndex` to the state managed by `useExpandable` presents a slippery slope.  There's just a lot less impedance if I augment the reducer therein with a `set_focal_index` action and export a corresponding helper function similar to what we're alreadying doing with `toggleItemFn`.  This doesn't break old accordions since we're adding new functionality, not changing a legacy interface.
+
+I let the new `setFocalIndexFn` bubble up from useExpandable to useAccordion:
 
 ```javascript
-# src/App.js
+# useExpandable.js
 
+function useExpandable() {
   ..
-  <Accordion
-    items={drawerItems}
-    initialExpandedItems={[0, 1, 6]}
-    inputItemsReducer={nestedItemsClosure()}
-    layoutReducer={menuLayoutReducer}
-    expansionReducer={menuExpandedReducer}
-  />
-  ..
+  const setFocalIndexFn = (index) => {
+    if (typeof index === 'number' && index >= 0 && index < items.length) {
+      if (index !== focalIndex) {
+        dispatch({
+          type: actionTypes.set_focal_index,
+          index: index,
+          allItems: items
+        })
+      } 
+    }
+  }
+
+  return { expandedItems, focalIndex, toggleItemFn, setFocalIndexFn }
+                                                    ---------------
+}
 ```
+
+```javascript
+# useAccordion.js
+
+function useAccordion() {
+  ..
+  const { expandedItems, focalIndex, toggleItemFn, setFocalIndexFn } = useExpandable()
+  return { components, setFocalIndexFn }
+}
+```
+
+which is now visible, finally, to our router code:
+
+```javascript
+# MenuDrawerApp.js
+
+function MenuDrawerApp(props) {
+    const { items, title, initialExpandedItems = [] } = props
+    const flatMenuItems = menuItemsReducer(items)
+
+    const { components, setFocalIndexFn } = useAccordion({
+        items: flatMenuItems,
+        initialExpandedItems: initialExpandedItems,
+        layoutReducer: menuLayoutReducer,
+        expansionReducer: menuExpandedReducer
+    })
+    const Accordion = () => ({components})
+
+    return (
+      <Router>
+        <Accordion />
+        <Switch>
+          <Router exact from "/" render={..} />
+          <Router from "/" render={ (props) => {
+                  return (<Content 
+                    {...props} 
+                    route={props.location.pathname} 
+                    getIndexFromRoute={getIndexFromRoute} 
+                    flatMenuItems={flatMenuItems} 
+                    setFocalIndexFn={setFocalIndexFn}  // <-- :-)
+                    text={`route = ${route}`} 
+                />)
+              }} 
+            /> 
+        </Switch>
+      </Router>
+    )
+```
+
+To finish the story, the `<Content>` component invokes `setFocalIndexFn` since it has awareness of the current route.  (A simple helper function returns the desired menu item index that corresponds to the current route.)
+
+```javascript
+# Content.js
+
+export const Content = (props) => {
+    const { className, route, getIndexFromRoute, flatMenuItems, text, setFocalIndexFn } = props
+    useEffect(()=>{
+        if (route) {
+            const index = getIndexFromRoute(route, flatMenuItems)
+            setFocalIndexFn(index)
+        }
+    }, [route, flatMenuItems, getIndexFromRoute, setFocalIndexFn])
+    return (<div className={className} >{text}</div>)
+}
+```
+
+Now the useExpandable drawer state is consistent with the current route regardless if specified as part of a URL or in response to a menu item click.
+
 ## [Summary](#contents)
 
 By altering the input data schema and customizing two reducers, I morphed a nested accordion into a `React Router-ready` menu drawer using some inversion-of-control ideas introduced [here](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md).  It took about 200 lines of code plus some router boilerplate. No new state variables were required.
