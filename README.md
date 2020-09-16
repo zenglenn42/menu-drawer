@@ -355,7 +355,7 @@ Now the useExpandable drawer state is consistent with the current route regardle
 
 ## [Summary](#contents)
 
-By altering the input data schema and customizing two reducers, I morphed a nested accordion into a `React Router-ready` menu drawer using some inversion-of-control ideas introduced [here](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md).  It took about 200 lines of code plus some router boilerplate. No new state variables were required.
+By altering the input data schema and customizing two reducers, I morphed a `<NestedAccordion>` component into a `router-ready` menu drawer using ([and sometimes abusing](#let-routes-drive-focal-index)) an inversion-of-control idea introduced [here](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md).  
 
 I used _way_ too many inline styles, but that can be cleaned up in post. ;-)
 I've got something I can start integrating into other projects of mine.
