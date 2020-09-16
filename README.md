@@ -25,9 +25,7 @@
 
 These days I'm working with React, Facebook's user interface library for web applications.
 
-In this project, I leverage the `inversion-of-control` principle (discussed 
-[here](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md))
-to transform a Nested Accordion component into a menu drawer, a staple of many user interfaces.
+In this project, I leverage the `inversion of control` principle to transform a [&lt;NestedAccordion&gt;](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md) component into a menu drawer, a staple of many user interfaces.
 
 ## [Bootstrap repos](#contents)
 
@@ -355,7 +353,8 @@ Now the useExpandable drawer state is consistent with the current route regardle
 
 ## [Summary](#contents)
 
-By altering the input data schema and customizing two reducers, I morphed a `<NestedAccordion>` component into a `router-ready` menu drawer using ([and sometimes abusing](#let-routes-drive-focal-index)) an inversion-of-control idea introduced [here](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md).  
+By altering the input data schema and customizing two reducers, I morphed a [&lt;NestedAccordion&gt;](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md) into a `router-ready` menu drawer using (and sometimes [abusing](#let-routes-drive-focal-index)) the `inversion of control` principle discussed [here](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md).  
 
-I used _way_ too many inline styles, but that can be cleaned up in post. ;-)
-I've got something I can start integrating into other projects of mine.
+Most of the cognitive work came with the requirement to drive focalIndex with menu clicks *or* routes specified in the URL.
+
+Since this is really just a sketch, I didn't spend much time with styling.  (I need to  nix all those inline styles and burn-off some jss mythology.)  But I have something that manages state sensibly and can be integrated into other projects of mine.
