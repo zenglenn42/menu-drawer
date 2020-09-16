@@ -25,7 +25,7 @@
 
 These days I'm working with React, Facebook's user interface library for web applications.
 
-In this project, I leverage the `inversion of control` principle to transform a [&lt;NestedAccordion&gt;](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md) component into a menu drawer, a staple of many user interfaces.
+In this project, I leverage the `inversion of control` principle I recently learned from [Kent Dodds](https://kentcdodds.com/blog/inversion-of-control) to transform a [&lt;NestedAccordion&gt;](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md) component into a menu drawer, a staple of many user interfaces.
 
 ## [Bootstrap repos](#contents)
 
