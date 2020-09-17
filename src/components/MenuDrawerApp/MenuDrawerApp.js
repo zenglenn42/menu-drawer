@@ -20,39 +20,28 @@ function MenuDrawerApp(props) {
         layoutReducer: menuLayoutReducer,
         expansionReducer: menuExpansionReducer
     })
-    const MenuDrawer = () => (<div style={{padding: '0 1em', width: '100%'}}>{components}</div>)
+    const MenuDrawer = () => (<div>{components}</div>)
 
     return (
         <Router>
             <header className="articleTitle">{title}</header>
-            <main style={{display: 'flex', flexDirection: 'row', overflow: 'hidden', width: '100%'}}>
+            <main className="main" >
                 <div className="menuDrawer" >
                     <MenuDrawer />
                 </div>
-                <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>
+                <div className="contentFrame" >
                     <Switch>
-                        <Route
-                            exact
-                            from="/"
-                            render={(props) => {
-                                return <Content {...props} text="select a menu item" />
-                            }}  
-                        />  
-                        <Route
-                            from="/"
-                            render={ (props) => {
-                                const route = props.location.pathname
-                                return (<Content 
-                                            {...props} 
-                                            route={route} 
-                                            getIndexFromRoute={getIndexFromRoute} 
-                                            flattenedMenuData={flattenedMenuData} 
-                                            setFocalIndex={setFocalIndex} 
-                                            text={`route = ${route}`} 
-                                        />)
-                                }
-                            }  
-                        />  
+                        <Route exact from="/">
+                            <Content className="content" />
+                        </Route>
+                        <Route from="/:route" >
+                            <Content 
+                                className="content" 
+                                flattenedMenuData={flattenedMenuData} 
+                                getIndexFromRoute={getIndexFromRoute} 
+                                setFocalIndex={setFocalIndex} 
+                            />
+                        </Route>
                     </Switch>
                 </div>
             </main>
