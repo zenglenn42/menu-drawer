@@ -1,0 +1,14 @@
+.menuDrawer {
+  display: flex;
+  min-width: 180px;
+  justify-content: center;
+  min-height: 50vh;
+  max-height: 50vh;
+  background-color: #eee;
+  color: black;
+  flex-grow: 0;
+  width: 100%;
+  overflow: auto scroll;
+  flex: 1;
+  border-right: 1px solid #ccc
+}

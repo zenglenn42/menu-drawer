@@ -8,7 +8,8 @@ import {
     getIndexFromRoute
 } from '../MenuDrawer/MenuDrawer'
 import { Content } from '../Content'
-import { articleTitle, drawer } from '../../style'
+import '../../App.css'
+import './MenuDrawer.css'
 
 function MenuDrawerApp(props) {
     const { items, title, initialExpandedItems = [] } = props
@@ -23,9 +24,9 @@ function MenuDrawerApp(props) {
 
     return (
         <Router>
-            <header style={articleTitle}>{title}</header>
+            <header className="articleTitle">{title}</header>
             <main style={{display: 'flex', flexDirection: 'row', overflow: 'hidden', width: '100%'}}>
-                <div style={drawer}>
+                <div className="menuDrawer" >
                     <MenuDrawer />
                 </div>
                 <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>
