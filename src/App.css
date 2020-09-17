@@ -1,0 +1,112 @@
+.appFrame {
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 100vh;
+  max-height: 100vh;
+  background-image: linear-gradient(-54deg, rebeccapurple, #1a006a);
+  color: white;
+  padding: 0 1em;
+  overflow-x: hidden
+}
+
+.header {
+  /* border: 1px solid green; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: inherit
+}
+
+.headerTitle {
+  font-size: 125%;
+  font-weight: bold;
+  text-align: center
+}
+
+.headerSubTitle {
+  margin-top: 0;
+  font-weight: bold;
+  font-Size: 85%
+}
+
+.main {
+  /* border: 1px solid white; */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  color: inherit
+}
+
+.article {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  min-width: 17rem;
+  max-width: 23rem;
+  border-radius: .15em;
+  color: inherit;
+  margin: 1em 2em;
+  border: 0.4em solid #929292;
+  overflow: none
+}
+
+.article2 {
+  width: 23rem;
+}
+
+.articleTitle {
+  padding: 0.75em;
+  font-weight: bold
+}
+
+.grow1x {
+  /* border: 1px solid white; */
+  flex: 1
+}
+
+.grow2x {
+  /* border: 1px solid white; */
+  flex: 2
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 100%;
+  font-weight: bold;
+  font-size: 80%;
+  color: #c0c0a0;
+  background-color: transparent;
+  padding-top: 1.5em;
+  padding-bottom: .75em
+}
+
+.footerButton {
+  color: inherit;
+  scale: 2;
+  padding: 0 1em;
+  margin-left: 2em;
+  text-decoration: none
+}
+
+.accordion {
+  display: flex;
+  justify-content: center;
+  min-height: 50vh;
+  max-height: 50vh;
+  overflow: auto scroll;
+  background-color: white;
+  color: black;
+  flex-grow: 0;
+  width: 100%
+}
