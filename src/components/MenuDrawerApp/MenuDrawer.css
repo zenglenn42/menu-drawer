@@ -2,7 +2,7 @@
   display: flex;
   min-width: 180px;
   justify-content: center;
-  min-height: 50vh;
+  min-height: 40vh;
   max-height: 50vh;
   background-color: #eee;
   color: black;
@@ -11,4 +11,29 @@
   overflow: auto scroll;
   flex: 1;
   border-right: 1px solid #ccc
+}
+
+.main {
+  display: flex; 
+  justify-content: center;
+  flex-direction: row; 
+  overflow: hidden scroll; 
+  width: 100%;
+  max-height: 100%
+}
+
+.contentFrame {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  color: black;
+  background-color: white;
+  overflow: auto scroll
+}
+
+.content {
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  min-height: 100%
 }
