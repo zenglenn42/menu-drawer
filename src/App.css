@@ -60,6 +60,7 @@
 }
 
 .article2 {
+  max-height: 100%;
   width: 23rem;
   border: 0.4em solid #929292;
   overflow: none
