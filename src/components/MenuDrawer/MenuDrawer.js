@@ -6,9 +6,7 @@ import { ReactComponent as ArrowupIcon } from '../../api/svg/ArrowUp.svg'
 import {
   isVisible,
   AccordionButton,
-  AccordionItem,
-  createContents,
-  createEmptyItem
+  AccordionItem
 } from '../NestedAccordion/NestedAccordion'
 import { Link } from 'react-router-dom'
 
@@ -19,8 +17,8 @@ import { Link } from 'react-router-dom'
 // Input Reduction
 // ----------------------------------------------------------------------------
 
-function menuItemsReducer(nestedItems, depth = 0, acc = [], parent) {
-  const flattenedItems = nestedItems.reduce((acc, item, index) => {
+function menuDataReducer(nestedData, depth = 0, acc = [], parent) {
+  const flattenedData = nestedData.reduce((acc, item, index) => {
     const hasNestedItems = item.items
     if (hasNestedItems) {
       acc.push({
@@ -30,7 +28,7 @@ function menuItemsReducer(nestedItems, depth = 0, acc = [], parent) {
         parent: parent
       })
       const newParent = acc.length - 1
-      return menuItemsReducer(item.items, depth + 1, acc, newParent)
+      return menuDataReducer(item.items, depth + 1, acc, newParent)
     } else {
       acc.push({
         ...item,
@@ -40,11 +38,11 @@ function menuItemsReducer(nestedItems, depth = 0, acc = [], parent) {
     }
     return acc
   }, acc)
-  return flattenedItems
+  return flattenedData
 }
 
-function getIndexFromRoute(route, flatItems) {
-  const matchingIndex = flatItems.reduce((acc, item, index) => {
+function getIndexFromRoute(route, flattenedMenuData) {
+  const matchingIndex = flattenedMenuData.reduce((acc, item, index) => {
     acc = (route === item.route && item.route !== undefined) ? index : acc
     return acc
   }, -1)
@@ -56,22 +54,22 @@ function getIndexFromRoute(route, flatItems) {
 // ----------------------------------------------------------------------------
 
 function createMenuButton(
-  index,
+  clickHandler,
   focalIndex,
-  isOpen = false,
-  toggleFn,
-  icon,
-  title,
-  route,
   focalRoute,
-  expandedEmoji,
-  collapsedEmoji
+  icon,
+  index,
+  isOpen = false,
+  route,
+  title,
+  expandIcon,
+  collapseIcon
 ) {
   // Should we have an expander icon?
   const hasRoute = (route !== undefined)
   const expanderIcon = (hasRoute) 
       ? undefined
-      : <span>{isOpen ? expandedEmoji : collapsedEmoji}</span>
+      : <span>{isOpen ? expandIcon : collapseIcon}</span>
 
   // Should we bold the text?
   let textStyle = { fontWeight: 'inherit', color: 'inherit' }
@@ -83,7 +81,7 @@ function createMenuButton(
 
   return (
     <Link to={route || focalRoute || '/'}>
-      <AccordionButton isOpen={isOpen} onClick={() => toggleFn(index)}>
+      <AccordionButton isOpen={isOpen} onClick={() => clickHandler(index)}>
         <div
           style={{
             display: 'inline-flex',
@@ -112,41 +110,45 @@ function createMenuButton(
   )
 }
 
+function createMenuItem(index, item, action) {
+  const { depth, icon, route, title } = item
+  const { allItems, expandedItems, focalIndex, setFocalIndex, toggleExpander } = action
+  const focalRoute = (focalIndex === undefined) ? '/' : allItems[focalIndex].route
+  const clickHandler = hasRoute(item) ? setFocalIndex : toggleExpander
+
+  if (isVisible(item, expandedItems, allItems)) {
+    const isOpen = expandedItems.includes(index)
+    return (
+      <AccordionItem
+        key={`${depth}_${title}_${index}`}
+        direction="vertical"
+        indent={depth}
+      >
+        {createMenuButton(
+          clickHandler,
+          focalIndex,
+          focalRoute,
+          icon,
+          index,
+          isOpen,
+          route,
+          title,
+          <ArrowupIcon width="100%" height="2em" />,
+          <ArrowdownIcon width="100%" height="2em" />
+        )}
+      </AccordionItem>
+    )
+  } 
+}
+
 function menuLayoutReducer(components, action) {
   switch (action.type) {
     case layoutActionTypes.map_items:
-      const focalRoute = (action.focalIndex === undefined) ? '/' : action.allItems[action.focalIndex].route
-      return action.allItems.map((item, index) => {
-        if (isVisible(item, action.expandedItems, action.allItems)) {
-          return (
-            <AccordionItem
-              key={`${item.depth}_${item.title}_${index}`}
-              direction="vertical"
-              indent={item.depth}
-            >
-              {createMenuButton(
-                index,
-                action.focalIndex,
-                action.expandedItems.includes(index),
-                action.toggleItemFn,
-                item.icon,
-                item.title,
-                item.route,
-                focalRoute,
-                <ArrowupIcon width="100%" height="2em" />,
-                <ArrowdownIcon width="100%" height="2em" />
-                // '👇',
-                // '👈'
-              )}
-              {createContents(
-                action.expandedItems.includes(index),
-                item.contents
-              )}
-            </AccordionItem>
-          )
-        }
-        return createEmptyItem(item.depth, index)
+      const menu = action.allItems.map((item, index) => {
+          return createMenuItem(index, item, action)
       })
+      return menu
+
     default: {
       throw new Error('Unhandled type in menuLayoutReducer: ' + action.type)
     }
@@ -159,8 +161,12 @@ function menuLayoutReducer(components, action) {
 
 // Allow only one peer item at a given nested depth to be visible.
 
+function hasRoute(item) {
+  return (item && item.route !== undefined)
+}
+
 function isaParent(item) {
-  return (item.contents === undefined) && (item.route === undefined)
+  return !hasRoute(item)
 }
 
 function parentOf(itemIndex, allItems) {
@@ -200,55 +206,55 @@ function removeExpandedPeersOf(itemIndex, expandedItems, allItems) {
   })
 }
 
-function menuExpandedReducer(state, action) {
+function menuExpansionReducer(state, action) {
   const { expandedItems = [], focalIndex } = state
+  const { allItems, index } = action
+  const item = allItems[index]
 
   switch(action.type) {
-    case expandableActionTypes.toggle_index: {
+    case expandableActionTypes.toggle_expander: {
       let nextExpandedItems = []
       let nextFocalIndex = focalIndex
-      const closeIt = expandedItems.includes(action.index)
-      const hasRoute = (action.allItems[action.index].route !== undefined)
+      const closeIt = expandedItems.includes(index)
       if (closeIt) {
-        if (hasRoute) {
+        if (hasRoute(item)) {
             nextFocalIndex = focalIndex // can't close a menu route
             nextExpandedItems = [...expandedItems]
         } else {
-          if (!isaParent(action.allItems[action.index])) {
+          if (!isaParent(item)) {
             // leaf node, so update focalIndex
-            nextFocalIndex = (focalIndex === action.index) ? undefined : focalIndex
+            nextFocalIndex = (focalIndex === index) ? undefined : focalIndex
           }
           if (expandedItems.length > 1) {
-            nextExpandedItems = expandedItems.filter((i) => i !== action.index)
+            nextExpandedItems = expandedItems.filter((i) => i !== index)
           }
         }
       } else {
         // openIt
-        nextFocalIndex = isaParent(action.allItems[action.index])
-          ? focalIndex
-          : action.index 
-        if (hasRoute) {
+        nextFocalIndex = isaParent(item) ? focalIndex : index 
+        if (hasRoute(item)) {
           nextExpandedItems = [...expandedItems]
         } else {
           nextExpandedItems = [
-            ...removeExpandedPeersOf(action.index, expandedItems, action.allItems),
-            action.index
+            ...removeExpandedPeersOf(index, expandedItems, allItems),
+            index
           ]
         }
       }
       return { expandedItems: nextExpandedItems, focalIndex: nextFocalIndex }
     }
+
     case expandableActionTypes.set_focal_index: {
-        let hasRoute = (action.index && action.allItems[action.index]) ? action.allItems[action.index].route : false
-        const nextFocalIndex = (hasRoute) ? action.index : focalIndex
+        const nextFocalIndex = (hasRoute(item)) ? index : focalIndex
         return { ...state, focalIndex: nextFocalIndex }
     }
+
     default: {
       throw new Error(
-        'Unhandled type in MenuDrawer menuExpandedReducer: ' + action.type
+        'Unhandled type in MenuDrawer menuExpansionReducer: ' + action.type
       )
     }
   }
 }
 
-export { menuItemsReducer, menuLayoutReducer, menuExpandedReducer, getIndexFromRoute }
+export { menuDataReducer, menuLayoutReducer, menuExpansionReducer, getIndexFromRoute }

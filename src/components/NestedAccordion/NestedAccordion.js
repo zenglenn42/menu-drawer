@@ -17,10 +17,10 @@ import { ReactComponent as ArrowupIcon } from '../../api/svg/ArrowUp.svg'
 // augmented with a depth field and knowledge of one's parent index
 // (for visibility calculation later on in layout reducer).
 
-function nestedItemsClosure(overrides = {}) {
+function nestedDataClosure(overrides = {}) {
   const itemOverrides = overrides
-  return function nestedItemsReducer(nestedItems, depth = 0, acc = [], parent) {
-    const flattenedItems = nestedItems.reduce((acc, item, index) => {
+  return function nestedDataReducer(nestedData, depth = 0, acc = [], parent) {
+    const flattenedData = nestedData.reduce((acc, item, index) => {
       const hasNestedItems = item.items
       const tagOverrides = itemOverrides.tag ? itemOverrides.tag[item.tag] : {}
       if (hasNestedItems) {
@@ -33,7 +33,7 @@ function nestedItemsClosure(overrides = {}) {
           parent: parent
         })
         const newParent = acc.length - 1
-        return nestedItemsReducer(item.items, depth + 1, acc, newParent)
+        return nestedDataReducer(item.items, depth + 1, acc, newParent)
       } else {
         acc.push({
           ...item,
@@ -44,7 +44,7 @@ function nestedItemsClosure(overrides = {}) {
       }
       return acc
     }, acc)
-    return flattenedItems
+    return flattenedData
   }
 }
 
@@ -125,14 +125,14 @@ function createButton(
   index,
   focalIndex,
   isOpen = false,
-  toggleFn,
+  toggleExpander,
   icon,
   text,
-  expandedEmoji,
-  collapsedEmoji
+  expandIcon,
+  collapseIcon
 ) {
   return (
-    <AccordionButton isOpen={isOpen} onClick={() => toggleFn(index)}>
+    <AccordionButton isOpen={isOpen} onClick={() => toggleExpander(index)}>
       <div
         style={{
           display: 'inline-flex',
@@ -159,7 +159,7 @@ function createButton(
           </span>
         </span>
         <div style={{ flex: '1' }} />
-        <span>{isOpen ? expandedEmoji : collapsedEmoji}</span>
+        <span>{isOpen ? expandIcon : collapseIcon}</span>
       </div>{' '}
     </AccordionButton>
   )
@@ -199,7 +199,7 @@ function nestedLayoutReducer(components, action) {
                 index,
                 action.focalIndex,
                 action.expandedItems.includes(index),
-                action.toggleItemFn,
+                action.toggleExpander,
                 item.icon,
                 item.title,
                 <ArrowupIcon width="100%" height="2em" />,
@@ -228,7 +228,7 @@ function nestedLayoutReducer(components, action) {
 
 // Allow only one peer item at a given nested depth to be visible.
 
-function singlePeerExpandedReducer(state, action) {
+function singlePeerExpansionReducer(state, action) {
   const { expandedItems = [], focalIndex } = state
 
   function isaParent(item) {
@@ -272,7 +272,7 @@ function singlePeerExpandedReducer(state, action) {
     })
   }
 
-  if (action.type === expandableActionTypes.toggle_index) {
+  if (action.type === expandableActionTypes.toggle_expander) {
     let nextExpandedItems = []
     let nextFocalIndex = focalIndex
     const closeIt = expandedItems.includes(action.index)
@@ -299,9 +299,9 @@ function singlePeerExpandedReducer(state, action) {
 }
 
 export { 
-  nestedItemsClosure, 
+  nestedDataClosure, 
   nestedLayoutReducer, 
-  singlePeerExpandedReducer,
+  singlePeerExpansionReducer,
   isVisible,
   AccordionButton,
   AccordionItem,

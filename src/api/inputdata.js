@@ -7,7 +7,7 @@ import { ReactComponent as UnicornIcon } from './svg/Unicorn.svg'
 import { ReactComponent as MoreIcon } from './svg/MoreDots.svg'
 import { ReactComponent as DiagramIcon } from './svg/Diagram.svg'
 
-export const menuItems = [
+export const nestedMenuData = [
   {
     title: 'Components',
     items: [
@@ -45,7 +45,7 @@ export const menuItems = [
   }
 ]
 
-export const nestedItemOverrides = {
+export const nestedAccordionDataOverrides = {
   tag: {
     equus: {
       icon: <HorseIcon width="100%" height="2em" />,
@@ -103,7 +103,7 @@ const unicornisItem = {
 
 export const items = [equusItem, elephantusItem, unicornisItem]
 
-export const nestedItems = [
+export const nestedAccordionData = [
   equusItem,
   {
     tag: 'cladogram',

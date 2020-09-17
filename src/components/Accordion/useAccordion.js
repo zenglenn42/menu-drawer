@@ -76,13 +76,13 @@ const AccordionButton = styled('button')(
 function createButton(
   index,
   isOpen = false,
-  toggleFn,
+  toggleExpander,
   text,
-  expandedEmoji,
-  collapsedEmoji
+  expandIcon,
+  collapseIcon
 ) {
   return (
-    <AccordionButton isOpen={isOpen} onClick={() => toggleFn(index)}>
+    <AccordionButton isOpen={isOpen} onClick={() => toggleExpander(index)}>
       <div
         style={{
           display: 'inline-block',
@@ -92,7 +92,7 @@ function createButton(
       >
         {text}
       </div>{' '}
-      <span>{isOpen ? expandedEmoji : collapsedEmoji}</span>
+      <span>{isOpen ? expandIcon : collapseIcon}</span>
     </AccordionButton>
   )
 }
@@ -114,7 +114,7 @@ function verticalBelowLayoutReducer(components, action) {
             {createButton(
               index,
               action.expandedItems.includes(index),
-              action.toggleItemFn,
+              action.toggleExpander,
               item.title,
               '👇',
               '👈'
@@ -153,12 +153,13 @@ function useAccordion({
     expandedItems: initialExpandedItems,
     focalIndex: initialFocalIndex
   }
-  const { expandedItems, focalIndex, toggleItemFn, setFocalIndexFn } = useExpandable({
+  const { expandedItems, focalIndex, toggleExpander, setFocalIndex } = useExpandable({
     initialState,
     reducer: expansionReducer,
     items: normalizedItems.current
   })
-  const memoizedToggleItem = useCallback(toggleItemFn, [])
+  const memoizedToggleItem = useCallback(toggleExpander, [])
+  const memoizedSetFocalIndex = useCallback(setFocalIndex, [])
 
   const memoizedLayoutReducer = useCallback(layoutReducer, [])
   const [components, dispatch] = useReducer(memoizedLayoutReducer, [])
@@ -166,14 +167,15 @@ function useAccordion({
   useEffect(() => {
     dispatch({
       type: layoutActionTypes.map_items,
-      toggleItemFn: memoizedToggleItem,
+      toggleExpander: memoizedToggleItem,
+      setFocalIndex: memoizedSetFocalIndex,
       expandedItems: expandedItems || [],
       focalIndex: focalIndex,
       allItems: normalizedItems.current
     })
     return
-  }, [normalizedItems, memoizedToggleItem, expandedItems, focalIndex])
-  return { components, setFocalIndexFn }
+  }, [normalizedItems, memoizedToggleItem, memoizedSetFocalIndex, expandedItems, focalIndex])
+  return { components, setFocalIndex }
 }
 
 export { useAccordion }

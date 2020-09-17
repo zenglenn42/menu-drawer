@@ -1,15 +1,15 @@
 import React, { useEffect, useCallback } from 'react'
 
 export const Content = (props) => {
-    const { className, route, getIndexFromRoute, flatMenuItems, text, setFocalIndexFn } = props
-    const getIndexFromRouteCB = useCallback(getIndexFromRoute)
-    const setFocalIndexFnCB = useCallback(setFocalIndexFn)
+    const { className, route, getIndexFromRoute, flattenedMenuData, text, setFocalIndex } = props
+    const memoizedGetIndexFromRoute = useCallback(getIndexFromRoute)
+    const memoizedSetFocalIndex = useCallback(setFocalIndex)
     useEffect(()=>{
         if (route) {
-            const index = getIndexFromRouteCB(route, flatMenuItems)
-            setFocalIndexFnCB(index)
+            const index = memoizedGetIndexFromRoute(route, flattenedMenuData)
+            memoizedSetFocalIndex(index)
         }
-    }, [route, flatMenuItems, getIndexFromRouteCB, setFocalIndexFnCB])
+    }, [route, flattenedMenuData, memoizedGetIndexFromRoute, memoizedSetFocalIndex])
     return (<div className={className} style={{overflow: 'auto scroll', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100%', backgroundColor:'white', color: 'black'}} >
                 {text}
             </div>)

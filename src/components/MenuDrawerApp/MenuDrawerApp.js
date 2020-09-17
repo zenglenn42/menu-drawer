@@ -1,23 +1,23 @@
 import React from 'react'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
-import { Content } from '../Content'
 import { useAccordion } from '../Accordion/useAccordion'
-import { articleTitle, drawer } from '../../style'
 import {
-    menuItemsReducer,
+    menuDataReducer,
     menuLayoutReducer,
-    menuExpandedReducer,
+    menuExpansionReducer,
     getIndexFromRoute
 } from '../MenuDrawer/MenuDrawer'
+import { Content } from '../Content'
+import { articleTitle, drawer } from '../../style'
 
 function MenuDrawerApp(props) {
     const { items, title, initialExpandedItems = [] } = props
-    const flatMenuItems = menuItemsReducer(items)
-    const { components, setFocalIndexFn } = useAccordion({
-        items: flatMenuItems,
+    const flattenedMenuData = menuDataReducer(items)
+    const { components, setFocalIndex } = useAccordion({
+        items: flattenedMenuData,
         initialExpandedItems: initialExpandedItems,
         layoutReducer: menuLayoutReducer,
-        expansionReducer: menuExpandedReducer
+        expansionReducer: menuExpansionReducer
     })
     const Accordion = () => (<div style={{padding: '0 1em', width: '100%'}}>{components}</div>)
 
@@ -45,8 +45,8 @@ function MenuDrawerApp(props) {
                                             {...props} 
                                             route={route} 
                                             getIndexFromRoute={getIndexFromRoute} 
-                                            flatMenuItems={flatMenuItems} 
-                                            setFocalIndexFn={setFocalIndexFn} 
+                                            flattenedMenuData={flattenedMenuData} 
+                                            setFocalIndex={setFocalIndex} 
                                             text={`route = ${route}`} 
                                         />)
                                 }

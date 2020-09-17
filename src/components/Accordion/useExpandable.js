@@ -1,7 +1,7 @@
 import React from 'react'
 
 const actionTypes = { 
-  toggle_index: 'toggle_index',
+  toggle_expander: 'toggle_expander',
   set_focal_index: 'set_focal_index' 
 }
 
@@ -34,7 +34,7 @@ function combineExpansionReducers(...reducers) {
 function permissiveReducer(state, action) {
   const { expandedItems = [], focalIndex } = state
   switch (action.type) {
-    case actionTypes.toggle_index: {
+    case actionTypes.toggle_expander: {
       let nextExpandedItems = []
       let nextFocalIndex = focalIndex
       const closeIt = expandedItems.includes(action.index)
@@ -62,7 +62,7 @@ function permissiveReducer(state, action) {
 
 function preventCloseReducer(state, action) {
   const { expandedItems = [] } = state
-  if (action.type === actionTypes.toggle_index) {
+  if (action.type === actionTypes.toggle_expander) {
     const closeIt = expandedItems.includes(action.index)
     const preventClose = expandedItems.length === 1
     if (closeIt && preventClose) {
@@ -71,9 +71,9 @@ function preventCloseReducer(state, action) {
   }
 }
 
-function singleExpandedReducer(state, action) {
+function singleExpansionReducer(state, action) {
   const { expandedItems = [] } = state
-  if (action.type === actionTypes.toggle_index) {
+  if (action.type === actionTypes.toggle_expander) {
     let nextExpandedItems = []
     let nextFocalIndex = undefined
     const openIt = !expandedItems.includes(action.index)
@@ -103,9 +103,9 @@ function useExpandable({
   ] = React.useReducer(memoizedReducer, initialState)
 
   const { expandedItems, focalIndex } = state
-  const toggleItemFn = (index) => {
+  const toggleExpander = (index) => {
     dispatch({
-      type: actionTypes.toggle_index,
+      type: actionTypes.toggle_expander,
       index: index,
       allItems: items
     })
@@ -115,7 +115,7 @@ function useExpandable({
   // toggle clicks).  This is especially useful if you want the current route, 
   // for example, to drive state.
 
-  const setFocalIndexFn = (index) => {
+  const setFocalIndex = (index) => {
     if (typeof index === 'number' && index >= 0 && index < items.length) {
 
       // Defensively dispatch only when state change expected.
@@ -129,7 +129,7 @@ function useExpandable({
       //
 
       if (index !== focalIndex) {
-        // console.log('useExpandable: setFocalIndexFn', focalIndex, ' -> ', index)
+        // console.log('useExpandable: setFocalIndex', focalIndex, ' -> ', index)
         dispatch({
           type: actionTypes.set_focal_index,
           index: index,
@@ -139,14 +139,14 @@ function useExpandable({
     }
   }
 
-  return { expandedItems, focalIndex, toggleItemFn, setFocalIndexFn }
+  return { expandedItems, focalIndex, toggleExpander, setFocalIndex }
 }
 
 export {
   useExpandable,
   combineExpansionReducers,
   preventCloseReducer,
-  singleExpandedReducer,
+  singleExpansionReducer,
   permissiveReducer,
   actionTypes
 }
