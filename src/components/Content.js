@@ -1,18 +1,21 @@
 import React, { useEffect, useCallback } from 'react'
+import { useParams } from 'react-router-dom'
 
 export const Content = (props) => {
-    const { className, route, getIndexFromRoute, flattenedMenuData, text, setFocalIndex } = props
+    const { className, getIndexFromRoute = () => {}, flattenedMenuData, setFocalIndex = () => {} } = props
     const memoizedGetIndexFromRoute = useCallback(getIndexFromRoute)
     const memoizedSetFocalIndex = useCallback(setFocalIndex)
-    useEffect(()=>{
+    const { route = '/' } = useParams()
+    const text = route === ("/") ? 'select menu item' : `route = /${route}`
+
+    useEffect(()=> {
         if (route) {
-            const index = memoizedGetIndexFromRoute(route, flattenedMenuData)
+            const index = memoizedGetIndexFromRoute(`/${route}`, flattenedMenuData)
             memoizedSetFocalIndex(index)
         }
     }, [route, flattenedMenuData, memoizedGetIndexFromRoute, memoizedSetFocalIndex])
-    return (<div className={className} style={{overflow: 'auto scroll', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100%', backgroundColor:'white', color: 'black'}} >
-                {text}
-            </div>)
+
+    return (<div className={className}>{text}</div>)
 }
 
 export default Content
