@@ -19,14 +19,14 @@ function MenuDrawerApp(props) {
         layoutReducer: menuLayoutReducer,
         expansionReducer: menuExpansionReducer
     })
-    const Accordion = () => (<div style={{padding: '0 1em', width: '100%'}}>{components}</div>)
+    const MenuDrawer = () => (<div style={{padding: '0 1em', width: '100%'}}>{components}</div>)
 
     return (
         <Router>
             <header style={articleTitle}>{title}</header>
             <main style={{display: 'flex', flexDirection: 'row', overflow: 'hidden', width: '100%'}}>
                 <div style={drawer}>
-                    <Accordion />
+                    <MenuDrawer />
                 </div>
                 <div style={{flex: 2, width: '100%', color: 'black', backgroundColor: 'white'}}>
                     <Switch>
