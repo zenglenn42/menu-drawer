@@ -120,7 +120,7 @@ Accordions don't have routes, just text `content` that comes from the input data
 ```javascript
 # src/api/inputdata.js
 
-export const drawerItems = [ 
+export const nestedMenuData = [ 
   {
     title: 'Components',
     items: [
@@ -153,7 +153,7 @@ I confer [bold text](https://github.com/zenglenn42/menu-drawer/blob/6bda2a7b00f5
 Menu drawer clicks typically drive application routes of some sort to request a new page from the server or to render content associated with a client-side route (typical with single page architecture).  In this case, it will be the former with clicks driving react-router:
 
 ```javascript
-# src/App.js
+# components/MenuDrawerApp.js
 
 import React from 'react'
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
@@ -161,71 +161,54 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 function App() {
   return (
     <Router>
-      <header style={articleTitle}>Menu Drawer</header>
-      <main>
-        <div style={drawer}>
-          <Accordion
-            items={drawerItems}
-            initialExpandedItems={[0, 1, 6]}
-            inputItemsReducer={nestedItemsClosure()}
-            layoutReducer={menuLayoutReducer}
-            expansionReducer={menuExpandedReducer}
-          />
-        </div>
-        <div>
-          <Switch>
-            <Route
-                exact
-                from="/"
-                render={(props) => (
-                    <Content {...props} text="select a menu item" />
-                )}  
-            />  
-            <Route
-                from="/"
-                render={(props) => {
-                    return <Content {...props} text={`route = ${props.location.pathname}`} />
-                }}  
-            />  
-          </Switch>
-        </div>
-      </main>
+        <header className="articleTitle">{title}</header>
+        <main className="mainMenuApp" >
+            <div className="menuDrawer" >
+                <MenuDrawer />
+            </div>
+            <div className="contentFrame" >
+                <Switch>
+                    <Route exact from="/">
+                        <Content className="content" />
+                    </Route>
+                    <Route from="/:route" >
+                        <Content className="content" />
+                    </Route>
+                </Switch>
+            </div>
+        </main>
     </Router>
   )
 }
 
 ```
 
-
 ### [Menu Layout Reducer](#contents)
 
 I wrapper each menu item with a click-sensitive `<Link to={route}>` component which passes control to the router so route-sensitive content may be displayed.
 
 ```javascript
+# components/MenuDrawer.js
+
 function menuLayoutReducer(components, action) {
+  const { allItems } = action
   switch (action.type) {
     case layoutActionTypes.map_items:
-      const focalRoute = (action.focalIndex === undefined) 
-          ? '/' 
-          : action.allItems[action.focalIndex].route
-      return action.allItems.map((item, index) => {
-        if (isVisible(item, action.expandedItems, action.allItems)) {
+      const menu = allItems.map((item, index) => {
           return (
             <AccordionItem
-              key={`${item.depth}_${item.title}_${index}`}
+              key={`${depth}_${title}_${index}`}
               direction="vertical"
-              indent={item.depth}
+              indent={depth} 
             >
-              <Link to={(item.route) ? item.route : focalRoute}>
-                <AccordionButton isOpen={isOpen} onClick={() => toggleFn(index)}>
-                ..
-                </AccordionButton>
+              // :-) Sets route on click.
+              <Link to={route || focalRoute || '/'} >
+                <AccordionButton> .. </AccordionButton>
               </Link>
-              ..
             </AccordionItem>
           )
-        }
       })
+      return menu
   }
 }
 ```
@@ -297,39 +280,45 @@ function useAccordion() {
 which is now visible, finally, to our router code:
 
 ```javascript
-# MenuDrawerApp.js
+# components/MenuDrawerApp.js
 
 function MenuDrawerApp(props) {
     const { items, title, initialExpandedItems = [] } = props
-    const flatMenuItems = menuItemsReducer(items)
-
-    const { components, setFocalIndexFn } = useAccordion({
-        items: flatMenuItems,
+    const flattenedMenuData = menuDataReducer(items)
+    const { components, setFocalIndex } = useAccordion({
+        items: flattenedMenuData,
         initialExpandedItems: initialExpandedItems,
         layoutReducer: menuLayoutReducer,
-        expansionReducer: menuExpandedReducer
+        expansionReducer: menuExpansionReducer
     })
-    const Accordion = () => ({components})
+    const MenuDrawer = () => (<div>{components}</div>)
 
     return (
-      <Router>
-        <Accordion />
-        <Switch>
-          <Router exact from "/" render={..} />
-          <Router from "/" render={ (props) => {
-                  return (<Content 
-                    {...props} 
-                    route={props.location.pathname} 
-                    getIndexFromRoute={getIndexFromRoute} 
-                    flatMenuItems={flatMenuItems} 
-                    setFocalIndexFn={setFocalIndexFn}  // <-- :-)
-                    text={`route = ${route}`} 
-                />)
-              }} 
-            /> 
-        </Switch>
-      </Router>
+        <Router>
+            <header className="articleTitle">{title}</header>
+            <main className="mainMenuApp" >
+                <div className="menuDrawer" >
+                    <MenuDrawer />
+                </div>
+                <div className="contentFrame" >
+                    <Switch>
+                        <Route exact from="/">
+                            <Content className="content" />
+                        </Route>
+                        <Route from="/:route" >
+                            <Content 
+                                className="content" 
+                                flattenedMenuData={flattenedMenuData} 
+                                getIndexFromRoute={getIndexFromRoute} 
+                                setFocalIndex={setFocalIndex} 
+                            />
+                        </Route>
+                    </Switch>
+                </div>
+            </main>
+        </Router>
     )
+}
 ```
 
 To finish the story, the `<Content>` component invokes `setFocalIndexFn` since it has awareness of the current route.  (A simple [helper function](https://github.com/zenglenn42/menu-drawer/blob/387a9f16abd06e1206dc09c09273c2cc920666bc/src/components/MenuDrawer/MenuDrawer.js#L46) returns the desired menu item index given the current route.)
@@ -337,15 +326,20 @@ To finish the story, the `<Content>` component invokes `setFocalIndexFn` since i
 ```javascript
 # Content.js
 
+import React, { useEffect, useCallback } from 'react'
+import { useParams } from 'react-router-dom'
+
 export const Content = (props) => {
-    const { className, route, getIndexFromRoute, flatMenuItems, text, setFocalIndexFn } = props
-    useEffect(()=>{
+    const { className, getIndexFromRoute = () => {}, flattenedMenuData, setFocalIndex = () => {} } = props
+    const { route = '/' } = useParams()
+    const text = route === ("/") ? 'select menu item' : `route = /${route}`
+    useEffect(()=> {
         if (route) {
-            const index = getIndexFromRoute(route, flatMenuItems)
-            setFocalIndexFn(index)
+            const index = getIndexFromRoute(`/${route}`, flattenedMenuData)
+            setFocalIndex(index)
         }
-    }, [route, flatMenuItems, getIndexFromRoute, setFocalIndexFn])
-    return (<div className={className} >{text}</div>)
+    }, [route, flattenedMenuData, getIndexFromRoute, setFocalIndex])
+    return (<div className={className}>{text}</div>)
 }
 ```
 

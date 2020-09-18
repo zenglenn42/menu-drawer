@@ -142,9 +142,10 @@ function createMenuItem(index, item, action) {
 }
 
 function menuLayoutReducer(components, action) {
+  const { allItems } = action
   switch (action.type) {
     case layoutActionTypes.map_items:
-      const menu = action.allItems.map((item, index) => {
+      const menu = allItems.map((item, index) => {
           return createMenuItem(index, item, action)
       })
       return menu
