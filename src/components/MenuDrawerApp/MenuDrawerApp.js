@@ -7,7 +7,7 @@ import {
     menuExpansionReducer,
     getIndexFromRoute
 } from '../MenuDrawer/MenuDrawer'
-import { Content } from '../Content'
+import { Content } from './Content'
 import '../../App.css'
 import './MenuDrawer.css'
 
