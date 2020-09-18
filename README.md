@@ -191,18 +191,16 @@ I wrapper each menu item with a click-sensitive `<Link to={route}>` component wh
 # components/MenuDrawer.js
 
 function menuLayoutReducer(components, action) {
-  const { allItems } = action
+  const { allItems, focalIndex } = action
+  const focalRoute = (focalIndex === undefined) ? '/' : allItems[focalIndex].route
+
   switch (action.type) {
     case layoutActionTypes.map_items:
       const menu = allItems.map((item, index) => {
           return (
-            <AccordionItem
-              key={`${depth}_${title}_${index}`}
-              direction="vertical"
-              indent={depth} 
-            >
+            <AccordionItem >
               // :-) Sets route on click.
-              <Link to={route || focalRoute || '/'} >
+              <Link to={item.route || focalRoute} >
                 <AccordionButton> .. </AccordionButton>
               </Link>
             </AccordionItem>
