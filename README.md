@@ -357,4 +357,4 @@ By altering the input data schema and customizing two reducers, I morphed a [&lt
 
 Most of the cognitive work came with the requirement to drive focalIndex with menu clicks *or* routes specified in the URL.
 
-Since this is really just a sketch, I didn't spend much time with styling.  (I need to  nix all those inline styles and burn-off some jss mythology.)  But I have something that manages state sensibly and can be integrated into other projects of mine.
+I now have something scalable that manages state sensibly and may be integrated into other projects of mine.
