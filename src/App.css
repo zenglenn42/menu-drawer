@@ -1,5 +1,4 @@
 .appFrame {
-  /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -13,7 +12,6 @@
 }
 
 .header {
-  /* border: 1px solid green; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,7 +33,6 @@
 }
 
 .main {
-  /* border: 1px solid white; */
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -56,14 +53,23 @@
   color: inherit;
   margin: 1em 2em;
   border: 0.4em solid #929292;
-  overflow: none
+  overflow: hidden
 }
 
 .article2 {
-  max-height: 100%;
-  width: 23rem;
-  border: 0.4em solid #929292;
-  overflow: none
+  min-width: 23rem
+}
+
+.accordion {
+  display: flex;
+  justify-content: center;
+  min-height: 16rem;
+  max-height: 16rem;
+  overflow: auto scroll;
+  background-color: white;
+  color: black;
+  flex-grow: 0;
+  width: 100%
 }
 
 .articleTitle {
@@ -72,12 +78,10 @@
 }
 
 .grow1x {
-  /* border: 1px solid white; */
   flex: 1
 }
 
 .grow2x {
-  /* border: 1px solid white; */
   flex: 2
 }
 
@@ -101,16 +105,4 @@
   padding: 0 1em;
   margin-left: 2em;
   text-decoration: none
-}
-
-.accordion {
-  display: flex;
-  justify-content: center;
-  min-height: 45vh;
-  max-height: 50vh;
-  overflow: auto scroll;
-  background-color: white;
-  color: black;
-  flex-grow: 0;
-  width: 100%
 }

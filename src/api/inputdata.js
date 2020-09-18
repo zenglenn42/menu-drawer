@@ -122,8 +122,6 @@ export const nestedAccordionData = [
                 The Nubian wild ass (Equus africanus africanus) is the nominate
                 subspecies of African wild ass, and one of the ancestors of the
                 domestic donkey, which was domesticated about 6,000 years ago.
-                It is presumed to be extinct, though two populations potentially
-                survive on the Caribbean island of Bonaire and in Gebel Elba.
               </div>
             )
           },
@@ -135,8 +133,7 @@ export const nestedAccordionData = [
                 The Somali wild ass (Equus africanus somaliensis) is a
                 subspecies of the African wild ass. It is found in Somalia, the
                 Southern Red Sea region of Eritrea, and the Afar Region of
-                Ethiopia. The legs of the Somali wild ass are striped,
-                resembling those of its relative, the zebra.
+                Ethiopia. 
               </div>
             )
           }
@@ -153,9 +150,7 @@ export const nestedAccordionData = [
               <div>
                 The horse (Equus ferus caballus) is one of two extant subspecies
                 of Equus ferus. It is an odd-toed ungulate mammal belonging to
-                the taxonomic family Equidae. The horse has evolved over the
-                past 45 to 55 million years from a small multi-toed creature,
-                Eohippus, into the large, single-toed animal of today.
+                the taxonomic family Equidae.
               </div>
             )
           },
@@ -167,9 +162,7 @@ export const nestedAccordionData = [
                 The tarpan (Equus ferus ferus), also known as Eurasian wild
                 horse, was a subspecies of wild horse. It is now extinct. The
                 last individual believed to be of this subspecies died in
-                captivity in the Russian Empire during 1909, although some
-                sources claim that it was not a genuine wild horse due to its
-                resemblance to domesticated horses.
+                captivity in the Russian Empire during 1909.
               </div>
             )
           },
@@ -209,8 +202,7 @@ export const nestedAccordionData = [
               <div>
                 The plains zebra (Equus quagga, formerly Equus burchellii), also
                 known as the common zebra, is the most common and geographically
-                widespread species of zebra. Its range is fragmented, but spans
-                much of southern and eastern Africa south of the Sahara.
+                widespread species of zebra. 
               </div>
             )
           },
@@ -222,8 +214,7 @@ export const nestedAccordionData = [
                 The Grévy's zebra (Equus grevyi), also known as the imperial
                 zebra, is the largest living wild equid and the largest and most
                 threatened of the three species of zebra, the other two being
-                the plains zebra and the mountain zebra. Named after Jules
-                Grévy, it is found in Kenya and Ethiopia.
+                the plains zebra and the mountain zebra.
               </div>
             )
           }

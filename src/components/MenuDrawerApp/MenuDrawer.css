@@ -1,42 +1,33 @@
+.mainMenuApp {
+  display: flex; 
+  justify-content: flex-start;
+  flex-direction: row; 
+  overflow: hidden;
+  width: 100%;
+  min-height: 16rem;
+  max-height: 16rem;
+}
+
 .menuDrawer {
-  display: flex;
-  min-width: 180px;
-  justify-content: center;
+  height: 100%;
   min-height: 100%;
-  max-height: 50vh;
   background-color: #eee;
   color: black;
   flex-grow: 0;
-  width: 100%;
   overflow: auto scroll;
-  flex: 1;
-  padding-bottom: 0.5rem
-}
-
-.main {
-  display: flex; 
-  justify-content: center;
-  flex-direction: row; 
-  overflow: hidden scroll; 
-  width: 100%;
-  max-height: 100%;
-  padding-bottom: 0.5rem
+  padding: 0 0.5rem;
+  flex: 1
 }
 
 .contentFrame {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  min-height: 13rem;
+  display: flex; 
+  justify-content: center; 
   color: black;
   background-color: white;
   overflow: auto scroll;
-  padding-bottom: 0.5rem
+  flex: 1.5;
 }
 
 .content {
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  min-height: 100%;
+  align-self: center
 }

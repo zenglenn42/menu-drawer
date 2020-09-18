@@ -25,7 +25,7 @@ function MenuDrawerApp(props) {
     return (
         <Router>
             <header className="articleTitle">{title}</header>
-            <main className="main" >
+            <main className="mainMenuApp" >
                 <div className="menuDrawer" >
                     <MenuDrawer />
                 </div>
