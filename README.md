@@ -18,6 +18,7 @@
   - [Menu Layout Reducer](#menu-layout-reducer)
   - [Menu Expansion Reducer](#menu-expansion-reducer)
   - [Let routes drive focal index](#let-routes-drive-focal-index)
+  - [Style focal parents](#style-focal-parents)
 - [**Demo**](https://menu-drawer.herokuapp.com/) ☚
 - [Summary](#summary)
 
@@ -341,6 +342,14 @@ export const Content = (props) => {
 ```
 
 Now the useExpandable drawer state is consistent with the current route regardless if specified as part of a URL or in response to a menu item click.
+
+## [Style focal parents](#contents)
+
+I define the notion of `focalParents` so I can uniquely style all the parents leading to a given selection:
+
+![alt](docs/images/focal-parent-styling.png)
+
+This provides a visual hint for locating a selected item in the menu if one or more focal parents are rolled-up.
 
 ## [Summary](#contents)
 
