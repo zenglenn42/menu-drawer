@@ -57,6 +57,7 @@ function createMenuButton(
   clickHandler,
   focalIndex,
   focalRoute,
+  focalParents,
   icon,
   index,
   isOpen = false,
@@ -74,9 +75,23 @@ function createMenuButton(
   // Should we bold the text?
   let textStyle = { fontWeight: 'inherit', color: 'inherit' }
   if (hasRoute) {
+
+    // Text style for focalIndex 
+    // selected 'leaf node' that triggers new content to be displayed
     textStyle = (focalIndex === index) ? { fontWeight: 'bold', color: 'blue' } : textStyle
+
+  } else if (focalParents.includes(index)) {
+
+    // Text style for parents of the focalIndex
+    // typically a muted version of focalIndex
+    textStyle = { fontWeight: 'bold', color: '#5050f9' }
+
   } else {
-    textStyle = (isOpen) ? {fontWeight: 'bold'} : textStyle
+
+    // Text style for non-focal parents
+    // very nominal styling
+    textStyle = {fontWeight: 'bold', color: '#606060'}
+
   }
 
   return (
@@ -110,7 +125,7 @@ function createMenuButton(
   )
 }
 
-function createMenuItem(index, item, action) {
+function createMenuItem(index, item, action, focalParents = []) {
   const { depth, icon, route, title } = item
   const { allItems, expandedItems, focalIndex, setFocalIndex, toggleExpander } = action
   const focalRoute = (focalIndex === undefined) ? '/' : allItems[focalIndex].route
@@ -128,6 +143,7 @@ function createMenuItem(index, item, action) {
           clickHandler,
           focalIndex,
           focalRoute,
+          focalParents,
           icon,
           index,
           isOpen,
@@ -142,11 +158,12 @@ function createMenuItem(index, item, action) {
 }
 
 function menuLayoutReducer(components, action) {
-  const { allItems } = action
+  const { allItems, focalIndex } = action
+  const focalParents = parentsOf(focalIndex, allItems)
   switch (action.type) {
     case layoutActionTypes.map_items:
       const menu = allItems.map((item, index) => {
-          return createMenuItem(index, item, action)
+          return createMenuItem(index, item, action, focalParents)
       })
       return menu
 
@@ -183,6 +200,20 @@ function parentOf(itemIndex, allItems) {
     pIndex = pIndex - 1
   }
   return undefined
+}
+
+function parentsOf(itemIndex, allItems) {
+  const parents = []
+  if (itemIndex === undefined) {
+    return parents
+  }
+
+  let pIndex = parentOf(itemIndex, allItems)
+  while (pIndex !== undefined && pIndex >= 0) {
+    parents.push(pIndex)
+    pIndex = parentOf(pIndex, allItems)
+  }
+  return parents
 }
 
 function removeExpandedPeersOf(itemIndex, expandedItems, allItems) {
@@ -257,7 +288,6 @@ function menuExpansionReducer(state, action) {
     }
   }
 }
-
 
 function expandToDepth(depth, nestedInputData) {
   const flattenedInputData = menuDataReducer(nestedInputData)
