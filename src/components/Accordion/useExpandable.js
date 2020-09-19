@@ -92,8 +92,7 @@ function useExpandable({
     focalIndex: undefined
   },
   reducer = permissiveReducer,
-  items = [],
-  focalIndexChangeCallback = () => {},
+  items = []
 } = {}) {
 
   const memoizedReducer = React.useCallback(reducer, [])

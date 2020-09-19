@@ -12,6 +12,7 @@ import {
   nestedLayoutReducer,
   singlePeerExpansionReducer
 } from './components/NestedAccordion/NestedAccordion'
+import { expandToDepth } from './components/MenuDrawer/MenuDrawer'
 import MenuDrawerApp from './components/MenuDrawerApp/MenuDrawerApp'
 import './App.css'
 
@@ -41,7 +42,7 @@ function App() {
           <MenuDrawerApp 
               items={nestedMenuData} 
               title="Menu Drawer"
-              initialExpandedItems={[0, 1, 6]}
+              initialExpandedItems={expandToDepth(1, nestedMenuData)}
           />
         </article>
       </main>

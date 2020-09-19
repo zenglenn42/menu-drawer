@@ -258,4 +258,22 @@ function menuExpansionReducer(state, action) {
   }
 }
 
-export { menuDataReducer, menuLayoutReducer, menuExpansionReducer, getIndexFromRoute }
+
+function expandToDepth(depth, nestedInputData) {
+  const flattenedInputData = menuDataReducer(nestedInputData)
+  const maxDepth = depth
+  return function() {
+    const expandedItems = flattenedInputData.reduce( 
+      (acc, item, index) => {
+        if (hasRoute(item)) return acc
+
+        if (item.depth <= maxDepth) {
+          acc.push(index)
+        }
+        return acc 
+      }, [])
+    return expandedItems
+  }
+}
+
+export { menuDataReducer, menuLayoutReducer, menuExpansionReducer, getIndexFromRoute, expandToDepth }

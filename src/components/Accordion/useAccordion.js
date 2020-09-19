@@ -150,7 +150,9 @@ function useAccordion({
 } = {}) {
   const normalizedItems = useRef(inputItemsReducer(items))
   const initialState = {
-    expandedItems: initialExpandedItems,
+    expandedItems: (typeof initialExpandedItems === 'function') 
+                      ? initialExpandedItems() 
+                      : initialExpandedItems,
     focalIndex: initialFocalIndex
   }
   const { expandedItems, focalIndex, toggleExpander, setFocalIndex } = useExpandable({
