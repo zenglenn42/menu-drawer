@@ -19,6 +19,7 @@
   - [Menu Expansion Reducer](#menu-expansion-reducer)
   - [Let routes drive focal index](#let-routes-drive-focal-index)
   - [Style focal parents](#style-focal-parents)
+  - [useMenuDrawer hook](#usemenudrawer-hook)
 - [**Demo**](https://menu-drawer.herokuapp.com/) ☚
 - [Summary](#summary)
 
@@ -350,6 +351,116 @@ I define the notion of `focalParents` so I can uniquely style all the parents le
 ![alt](docs/images/focal-parent-styling.png)
 
 This provides a visual hint for locating a selected item in the menu if one or more focal parents are rolled-up.
+
+## [useMenuDrawer hook](#contents)
+
+It's interesting to experience the natural pull toward a custom hook.  Obviously I've been riffing on useAccordion and useExpandable for awhile, so I'm increasingly comfortable with thinking about code reuse in those terms.  
+
+Nominally, I've considered a menu drawer hook, but was simply getting by with this:
+
+```javascript
+# MenuAppDrawer.js
+
+    const { components, setFocalIndex } = useAccordion({
+      items: flattenedMenuData,
+      initialExpandedItems: initialExpandedItems,
+      layoutReducer: menuLayoutReducer,
+      expansionReducer: menuExpansionReducer
+    })
+    const MenuDrawer = () => (<div>{components}</div>)
+    ...
+
+    return(
+      <MenuDrawer />
+    )
+```
+
+However, I've been thinking about adding scroll persistence to the drawer, a thoughtful feature for long menus so the user doesn't have to hunt around for where they left off after minimizing / maximizing the menu.
+
+But where should I persist that state?  Doesn't feel right to lump it into MenuDrawerApp.js since scroll position is really intrinsic to the menu drawer itself.  I could stash it in useAccordion, I suppose, but scroll persistence in an accordion seems an odd fit.  I've not run into many massively long accordions in my experience.  Plus, I'm curious to see if I can leverage inversion-of-control to leave the underlying component alone while implementing a higher level component.
+
+It seems fitting to persist scroll position within the MenuDrawer.js code.  But I don't have a hook there yet.  Since I'll still need to wrapper useAccordion in his own hook, it stands to reason I should create a useMenuDrawer hook to wrapper the accordion.
+
+I end up with this:
+
+```javascript
+
+# MenuDrawer.js
+
+export function useMenuDrawer(props) {
+  const { 
+          items = [], 
+          initialExpandedItems = [], 
+          inputItemsReducer = menuDataReducer,
+          layoutReducer = menuLayoutReducer, 
+          expansionReducer = menuExpansionReducer } = props
+
+  const flattenedMenuData = inputItemsReducer(items)
+
+  const { components, setFocalIndex : setAccordionFocalIndex } = useAccordion({
+    items: flattenedMenuData,
+    initialExpandedItems: (typeof initialExpandedItems === 'function') 
+                      ? initialExpandedItems() 
+                      : initialExpandedItems,
+    layoutReducer: layoutReducer,
+    expansionReducer: expansionReducer,
+  })
+  
+  const dfltClassName = 'menuDrawer'  // Style the div holding the menu
+  const MenuDrawer = (props) => {
+    return (
+      <div className={props.className || dfltClassName }>
+        {components}
+      </div>
+    )
+  }
+
+  const setFocalIndexFromRoute = (route) => {
+    const index = getIndexFromRoute(route, flattenedMenuData)
+    setAccordionFocalIndex(index)
+  }
+
+  return { MenuDrawer, setFocalIndexFromRoute }
+}
+```
+
+It allows me to clean-up the interface between the menu drawer and the app that consumes the drawer.  I no longer need to expose all the helper functions and default reducers anymore.  Plus I now have a `<MenuDrawer>` component that is reaonably named and support a className prop for styling the enclosing `<div>`.
+
+```javascript
+# MenuDrawerApp.js
+
+function MenuDrawerApp(props) {
+    const { items, title, initialExpandedItems = [] } = props
+    const { MenuDrawer, setFocalIndexFromRoute } = useMenuDrawer({
+        items: items,
+        initialExpandedItems: initialExpandedItems,
+    })
+
+    return (
+        <Router>
+            <header className="articleTitle">{title}</header>
+            <main className="mainMenuApp" >
+                <MenuDrawer className="menuDrawer" />
+                <div className="contentFrame" >
+                    <Switch>
+                        <Route exact from="/">
+                            <Content className="content" />
+                        </Route>
+                        <Route from="/:route" >
+                            <Content 
+                                className="content" 
+                                setFocalIndex={setFocalIndexFromRoute} 
+                            />
+                        </Route>
+                    </Switch>
+                </div>
+            </main>
+        </Router>
+    )
+}
+```
+
+This just feels right.  I also have a logical place, `useMenuDrawer`, to add scroll persistence.
 
 ## [Summary](#contents)
 
