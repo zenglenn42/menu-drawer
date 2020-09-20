@@ -159,15 +159,20 @@ function createMenuItem(index, item, action, focalParents = []) {
   } 
 }
 
+const dfltClassName = 'menuDrawer'  // Style the div holding the menu
+
 function menuLayoutReducer(components, action) {
-  const { allItems, focalIndex } = action
+  const { allItems, focalIndex, className = dfltClassName } = action
   const focalParents = parentsOf(focalIndex, allItems)
   switch (action.type) {
     case layoutActionTypes.map_items:
       const menu = allItems.map((item, index) => {
           return createMenuItem(index, item, action, focalParents)
       })
-      return menu
+      const menuDrawer = (
+        <div className={className}>{menu}</div>
+      )
+      return menuDrawer
 
     default: {
       throw new Error('Unhandled type in menuLayoutReducer: ' + action.type)

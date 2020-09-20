@@ -15,20 +15,19 @@ function MenuDrawerApp(props) {
     const { items, title, initialExpandedItems = [] } = props
     const flattenedMenuData = menuDataReducer(items)
     const { components, setFocalIndex } = useAccordion({
+        className: "menuDrawer",
         items: flattenedMenuData,
         initialExpandedItems: initialExpandedItems,
         layoutReducer: menuLayoutReducer,
-        expansionReducer: menuExpansionReducer
+        expansionReducer: menuExpansionReducer,
     })
-    const MenuDrawer = () => (<div>{components}</div>)
+    const MenuDrawer = () => (<>{components}</>)
 
     return (
         <Router>
             <header className="articleTitle">{title}</header>
             <main className="mainMenuApp" >
-                <div className="menuDrawer" >
-                    <MenuDrawer />
-                </div>
+                <MenuDrawer />
                 <div className="contentFrame" >
                     <Switch>
                         <Route exact from="/">

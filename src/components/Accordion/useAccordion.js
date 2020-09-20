@@ -146,7 +146,8 @@ function useAccordion({
   expansionReducer = dfltExpansionReducer,
   items = [],
   initialExpandedItems = [],
-  initialFocalIndex = undefined
+  initialFocalIndex = undefined,
+  className = '',
 } = {}) {
   const normalizedItems = useRef(inputItemsReducer(items))
   const initialState = {
@@ -173,10 +174,16 @@ function useAccordion({
       setFocalIndex: memoizedSetFocalIndex,
       expandedItems: expandedItems || [],
       focalIndex: focalIndex,
-      allItems: normalizedItems.current
+      allItems: normalizedItems.current,
+      className: className
     })
     return
-  }, [normalizedItems, memoizedToggleItem, memoizedSetFocalIndex, expandedItems, focalIndex])
+  }, [normalizedItems, 
+      memoizedToggleItem, 
+      memoizedSetFocalIndex, 
+      expandedItems, 
+      focalIndex, 
+      className])
   return { components, setFocalIndex }
 }
 
