@@ -424,7 +424,7 @@ export function useMenuDrawer(props) {
 }
 ```
 
-It allows me to clean-up the interface between the menu drawer and the app that consumes the drawer.  I no longer need to expose all the helper functions and default reducers anymore.  Plus I now have a `<MenuDrawer>` component that is reaonably named and support a className prop for styling the enclosing `<div>`.
+It allows me to clean-up the interface between the menu drawer and the app that consumes the drawer.  I no longer need to expose all the helper functions and default reducers anymore.  Plus I now have a `<MenuDrawer>` component that is reaonably named and supports a className prop for styling the enclosing `<div>`.
 
 ```javascript
 # MenuDrawerApp.js
