@@ -2,6 +2,11 @@
 
 ### _Nested Accordion + Inversion-of-Control === Menu Drawer_
 
+![alt](docs/images/use-menu-drawer.jpg)
+_<h6>Photo by <a href="https://unsplash.com/photos/QCPv6G4dMN0">Matt Briney</a></h6>_
+
+Add a menu drawer to your React application with a single hook (by transforming an accordion component).
+
 [![DEMO NESTED ACCORDION](docs/images/compare.png)](https://menu-drawer.herokuapp.com/)
 
 
@@ -24,8 +29,6 @@
 - [Summary](#summary)
 
 ## [Overview](#contents)
-
-These days I'm working with React, Facebook's user interface library for web applications.
 
 In this project, I leverage the `inversion of control` principle I recently learned from [Kent Dodds](https://kentcdodds.com/blog/inversion-of-control) to transform a [&lt;NestedAccordion&gt;](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md) component into a menu drawer, a staple of many user interfaces.
 
