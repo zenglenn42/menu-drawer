@@ -34,7 +34,7 @@ In this project, I leverage the `inversion of control` principle I recently lear
 
 ## [Setup repos](#contents)
 
-I bootstrap this repo directly from the `inversion-of-control` repo where the nested accordion lives.
+I bootstrap this repo directly from my [inversion-of-control](https://github.com/zenglenn42/inversion-of-control) repo where the nested accordion lives.
 
 * Update the branding text and icons in ./public
 * Strip down the README and ./docs/images
