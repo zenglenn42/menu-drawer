@@ -24,6 +24,7 @@ function menuDataReducer(nestedData, depth = 0, acc = [], parent) {
       acc.push({
         icon: item.icon,
         title: item.title,
+        subtitle: item.subtitle,
         depth: depth,
         parent: parent
       })
@@ -63,6 +64,7 @@ function createMenuButton(
   isOpen = false,
   route,
   title,
+  subtitle,
   expandIcon,
   collapseIcon
 ) {
@@ -113,9 +115,8 @@ function createMenuButton(
             }}
           >
             {icon ? <span style={{ marginRight: '1em' }}>{icon}</span> : <></>}
-            <span style={textStyle} >
-              {title}
-            </span>
+            <span style={textStyle} >{title}</span>&nbsp;
+            <span style={textStyle} >{subtitle}</span>
           </span>
           <div style={{ flex: '1' }} />
           {expanderIcon}
@@ -126,7 +127,7 @@ function createMenuButton(
 }
 
 function createMenuItem(index, item, action, focalParents = []) {
-  const { depth, icon, route, title } = item
+  const { depth, icon, route, title, subtitle = ''} = item
   const { allItems, expandedItems, focalIndex, setFocalIndex, toggleExpander } = action
   const focalRoute = (focalIndex === undefined) ? '/' : allItems[focalIndex].route
   const clickHandler = hasRoute(item) ? setFocalIndex : toggleExpander
@@ -149,6 +150,7 @@ function createMenuItem(index, item, action, focalParents = []) {
           isOpen,
           route,
           title,
+          subtitle,
           <ArrowupIcon width="100%" height="2em" />,
           <ArrowdownIcon width="100%" height="2em" />
         )}

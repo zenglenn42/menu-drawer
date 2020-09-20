@@ -88,7 +88,7 @@ const AccordionItem = styled('div')(
   },
   (props) => ({
     gridAutoFlow: props.direction === 'horizontal' ? 'column' : 'row',
-    paddingLeft: `${props.indent * 2}em`
+    paddingLeft: `${props.indent * 1.25}em`
   })
 )
 

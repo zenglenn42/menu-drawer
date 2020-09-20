@@ -38,8 +38,26 @@ export const nestedMenuData = [
           {
             title: 'Button',
             route: '/button'
+          },
+          {
+            title: 'Button Group',
+            route: '/buttongroup'
           }
         ]
+      }
+    ]
+  },
+  {
+    title: 'Component',
+    subtitle: 'API',
+    items: [
+      {
+        title: 'Accordion',
+        route: '/accordion'
+      },
+      {
+        title: 'Alert',
+        route: '/alert'
       }
     ]
   }
