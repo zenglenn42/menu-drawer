@@ -1,33 +1,21 @@
 import React from 'react'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
-import { useAccordion } from '../Accordion/useAccordion'
-import {
-    menuDataReducer,
-    menuLayoutReducer,
-    menuExpansionReducer,
-    getIndexFromRoute
-} from '../MenuDrawer/MenuDrawer'
+import { useMenuDrawer } from '../MenuDrawer/MenuDrawer'
 import { Content } from './Content'
-import '../../App.css'
-import './MenuDrawer.css'
+import './MenuDrawerApp.css'
 
 function MenuDrawerApp(props) {
     const { items, title, initialExpandedItems = [] } = props
-    const flattenedMenuData = menuDataReducer(items)
-    const { components, setFocalIndex } = useAccordion({
-        className: "menuDrawer",
-        items: flattenedMenuData,
+    const { MenuDrawer, setFocalIndexFromRoute } = useMenuDrawer({
+        items: items,
         initialExpandedItems: initialExpandedItems,
-        layoutReducer: menuLayoutReducer,
-        expansionReducer: menuExpansionReducer,
     })
-    const MenuDrawer = () => (<>{components}</>)
 
     return (
         <Router>
             <header className="articleTitle">{title}</header>
             <main className="mainMenuApp" >
-                <MenuDrawer />
+                <MenuDrawer className="menuDrawer" />
                 <div className="contentFrame" >
                     <Switch>
                         <Route exact from="/">
@@ -36,9 +24,7 @@ function MenuDrawerApp(props) {
                         <Route from="/:route" >
                             <Content 
                                 className="content" 
-                                flattenedMenuData={flattenedMenuData} 
-                                getIndexFromRoute={getIndexFromRoute} 
-                                setFocalIndex={setFocalIndex} 
+                                setFocalIndex={setFocalIndexFromRoute} 
                             />
                         </Route>
                     </Switch>

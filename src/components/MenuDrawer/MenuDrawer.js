@@ -3,6 +3,7 @@ import { layoutActionTypes } from '../Accordion/useAccordion'
 import { actionTypes as expandableActionTypes } from '../Accordion/useExpandable'
 import { ReactComponent as ArrowdownIcon } from '../../api/svg/ArrowDown.svg'
 import { ReactComponent as ArrowupIcon } from '../../api/svg/ArrowUp.svg'
+import { useAccordion } from '../Accordion/useAccordion'
 import {
   isVisible,
   AccordionButton,
@@ -159,20 +160,15 @@ function createMenuItem(index, item, action, focalParents = []) {
   } 
 }
 
-const dfltClassName = 'menuDrawer'  // Style the div holding the menu
-
 function menuLayoutReducer(components, action) {
-  const { allItems, focalIndex, className = dfltClassName } = action
+  const { allItems, focalIndex } = action
   const focalParents = parentsOf(focalIndex, allItems)
   switch (action.type) {
     case layoutActionTypes.map_items:
       const menu = allItems.map((item, index) => {
           return createMenuItem(index, item, action, focalParents)
       })
-      const menuDrawer = (
-        <div className={className}>{menu}</div>
-      )
-      return menuDrawer
+      return menu
 
     default: {
       throw new Error('Unhandled type in menuLayoutReducer: ' + action.type)
@@ -313,4 +309,49 @@ function expandToDepth(depth, nestedInputData) {
   }
 }
 
-export { menuDataReducer, menuLayoutReducer, menuExpansionReducer, getIndexFromRoute, expandToDepth }
+// ----------------------------------------------------------------------------
+// Hook
+// ----------------------------------------------------------------------------
+
+function useMenuDrawer(props) {
+  const { 
+          items = [], 
+          initialExpandedItems = [], 
+          inputItemsReducer = menuDataReducer,
+          layoutReducer = menuLayoutReducer, 
+          expansionReducer = menuExpansionReducer } = props
+
+  const flattenedMenuData = inputItemsReducer(items)
+
+  const { components, setFocalIndex : setAccordionFocalIndex } = useAccordion({
+    items: flattenedMenuData,
+    initialExpandedItems: (typeof initialExpandedItems === 'function') 
+                      ? initialExpandedItems() 
+                      : initialExpandedItems,
+    layoutReducer: layoutReducer,
+    expansionReducer: expansionReducer,
+  })
+  
+  const dfltClassName = 'menuDrawer'  // Style the div holding the menu
+  const MenuDrawer = (props) => {
+    return (
+      <div className={props.className || dfltClassName }>
+        {components}
+      </div>
+    )
+  }
+
+  const setFocalIndexFromRoute = (route) => {
+    const index = getIndexFromRoute(route, flattenedMenuData)
+    setAccordionFocalIndex(index)
+  }
+
+  return { MenuDrawer, setFocalIndexFromRoute }
+}
+
+export { 
+      menuDataReducer, 
+      menuLayoutReducer, 
+      menuExpansionReducer, 
+      expandToDepth,
+      useMenuDrawer }
