@@ -13,7 +13,7 @@ Add a menu drawer to your React application with a single hook (by transforming 
 ## [Contents](#contents)
 
 - [Overview](#overview)
-- [Bootstrap repos](#bootstrap-repos)
+- [Setup repos](#setup-repos)
 - [Just add data](#just-add-data)
 - [Fix regressions](#fix-regressions)
 - [Dev Work](#dev-work)
@@ -32,7 +32,7 @@ Add a menu drawer to your React application with a single hook (by transforming 
 
 In this project, I leverage the `inversion of control` principle I recently learned from [Kent Dodds](https://kentcdodds.com/blog/inversion-of-control) to transform a [&lt;NestedAccordion&gt;](https://github.com/zenglenn42/inversion-of-control/blob/master/README.md) component into a menu drawer, a staple of many user interfaces.
 
-## [Bootstrap repos](#contents)
+## [Setup repos](#contents)
 
 I bootstrap this repo directly from the `inversion-of-control` repo where the nested accordion lives.
 
