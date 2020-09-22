@@ -6,8 +6,8 @@ import { ReactComponent as ArrowupIcon } from '../../api/svg/ArrowUp.svg'
 import { useAccordion } from '../Accordion/useAccordion'
 import {
   isVisible,
-  AccordionButton,
-  AccordionItem
+  AccordionButton
+  // AccordionItem
 } from '../NestedAccordion/NestedAccordion'
 import { Link } from 'react-router-dom'
 
@@ -97,8 +97,9 @@ function createMenuButton(
 
   }
 
+  const _route = route || focalRoute || '/'
   return (
-    <Link to={route || focalRoute || '/'}>
+    <Link to={{pathname: _route, state: { fromMenuClick: true }}} >
       <AccordionButton isOpen={isOpen} onClick={() => clickHandler(index)}>
         <div
           style={{
@@ -127,6 +128,19 @@ function createMenuButton(
   )
 }
 
+const AccordionItem = (props) => {
+  const style = {
+    display: 'grid',
+    gridTemplate: 'auto auto',
+    gridGap: 4,
+    gridAutoFlow: (props.direction) === 'horizontal' ? 'column' : 'row',
+    paddingLeft: `${props.indent * 2}em`
+  }
+  return (
+    <div id={props.focalId} style={style}>{props.children}</div>
+  )
+}
+
 function createMenuItem(index, item, action, focalParents = []) {
   const { depth, icon, route, title, subtitle = ''} = item
   const { allItems, expandedItems, focalIndex, setFocalIndex, toggleExpander } = action
@@ -140,6 +154,7 @@ function createMenuItem(index, item, action, focalParents = []) {
         key={`${depth}_${title}_${index}`}
         direction="vertical"
         indent={depth}
+        focalId={index === focalIndex ? "focalId" : null}
       >
         {createMenuButton(
           clickHandler,
@@ -335,9 +350,9 @@ function useMenuDrawer(props) {
   const dfltClassName = 'menuDrawer'  // Style the div holding the menu
   const MenuDrawer = (props) => {
     return (
-      <div className={props.className || dfltClassName }>
-        {components}
-      </div>
+        <div className={props.className || dfltClassName }>
+          {components}
+        </div>
     )
   }
 
@@ -350,8 +365,9 @@ function useMenuDrawer(props) {
 }
 
 export { 
-      menuDataReducer, 
-      menuLayoutReducer, 
-      menuExpansionReducer, 
-      expandToDepth,
-      useMenuDrawer }
+  menuDataReducer, 
+  menuLayoutReducer, 
+  menuExpansionReducer, 
+  expandToDepth,
+  useMenuDrawer 
+}
