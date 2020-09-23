@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useLayoutEffect } from 'react'
 import { layoutActionTypes } from '../Accordion/useAccordion'
 import { actionTypes as expandableActionTypes } from '../Accordion/useExpandable'
 import { ReactComponent as ArrowdownIcon } from '../../api/svg/ArrowDown.svg'
@@ -7,9 +7,9 @@ import { useAccordion } from '../Accordion/useAccordion'
 import {
   isVisible,
   AccordionButton
-  // AccordionItem
 } from '../NestedAccordion/NestedAccordion'
 import { Link } from 'react-router-dom'
+import { useScrollPosition } from '@n8tb1t/use-scroll-position'
 
 // The following adds menu drawer behavior to a Nested Accordion component using
 // inversion-of-control principle.
@@ -137,13 +137,13 @@ const AccordionItem = (props) => {
     paddingLeft: `${props.indent * 2}em`
   }
   return (
-    <div id={props.focalId} style={style}>{props.children}</div>
+    <div id={props.focalId} ref={props.focalRef} style={style}>{props.children}</div>
   )
 }
 
 function createMenuItem(index, item, action, focalParents = []) {
   const { depth, icon, route, title, subtitle = ''} = item
-  const { allItems, expandedItems, focalIndex, setFocalIndex, toggleExpander } = action
+  const { allItems, expandedItems, focalIndex, focalRef, setFocalIndex, toggleExpander } = action
   const focalRoute = (focalIndex === undefined) ? '/' : allItems[focalIndex].route
   const clickHandler = hasRoute(item) ? setFocalIndex : toggleExpander
 
@@ -155,6 +155,7 @@ function createMenuItem(index, item, action, focalParents = []) {
         direction="vertical"
         indent={depth}
         focalId={index === focalIndex ? "focalId" : null}
+        focalRef={index === focalIndex ? focalRef : null}
       >
         {createMenuButton(
           clickHandler,
@@ -338,7 +339,7 @@ function useMenuDrawer(props) {
 
   const flattenedMenuData = inputItemsReducer(items)
 
-  const { components, setFocalIndex : setAccordionFocalIndex } = useAccordion({
+  const { components, setFocalIndex : setAccordionFocalIndex, focalIndex, focalRef } = useAccordion({
     items: flattenedMenuData,
     initialExpandedItems: (typeof initialExpandedItems === 'function') 
                       ? initialExpandedItems() 
@@ -347,20 +348,37 @@ function useMenuDrawer(props) {
     expansionReducer: expansionReducer,
   })
   
+  const divRef = useRef()             // For scrollable div enclosing menu items
   const dfltClassName = 'menuDrawer'  // Style the div holding the menu
+
   const MenuDrawer = (props) => {
+    useLayoutEffect(()=> {
+      if (focalRef.current) {
+        focalRef.current.scrollIntoView({/*behavior: 'smooth',*/ block: 'center'})
+      }}
+    )
+    useScrollPosition(({ prevPos, currPos }) => {
+      // console.log(currPos.x, currPos.y)
+      }, [focalIndex], focalRef, false, 0, divRef
+    )
     return (
-        <div className={props.className || dfltClassName }>
+        <div ref={divRef} className={props.className || dfltClassName }>
           {components}
         </div>
     )
   }
 
+  // Allow route to drive menu selection.
+
   const setFocalIndexFromRoute = (route) => {
     const index = getIndexFromRoute(route, flattenedMenuData)
     setAccordionFocalIndex(index)
-  }
 
+    // Scroll menu drawer to menu item that corresponds with specified route.
+    // if (focalRef.current) {
+    //   focalRef.current.scrollIntoView({behavior: 'smooth', block: 'center'})
+    // }
+  }
   return { MenuDrawer, setFocalIndexFromRoute }
 }
 

@@ -164,6 +164,8 @@ function useAccordion({
   const memoizedLayoutReducer = useCallback(layoutReducer, [])
   const [components, dispatch] = useReducer(memoizedLayoutReducer, [])
 
+  const focalRef = useRef()
+
   useEffect(() => {
     dispatch({
       type: layoutActionTypes.map_items,
@@ -171,6 +173,7 @@ function useAccordion({
       setFocalIndex: memoizedSetFocalIndex,
       expandedItems: expandedItems || [],
       focalIndex: focalIndex,
+      focalRef: focalRef,
       allItems: normalizedItems.current
     })
     return
@@ -179,7 +182,7 @@ function useAccordion({
       memoizedSetFocalIndex, 
       expandedItems, 
       focalIndex])
-  return { components, setFocalIndex }
+  return { components, setFocalIndex, focalIndex, focalRef }
 }
 
 export { useAccordion }
